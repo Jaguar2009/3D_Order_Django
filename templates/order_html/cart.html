@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h2>Кошик</h2>
+
+{% if cart_items %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Назва замовлення</th>
+                <th>Користувач</th>
+                <th>Терміновість</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.order.name }}</td>
+                    <td>{{ item.order.user.first_name }}</td>
+                    <td>{{ item.order.delivery_time }}</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Видалити</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% else %}
+    <p>Ваш кошик порожній.</p>
+{% endif %}
+{% endblock %}

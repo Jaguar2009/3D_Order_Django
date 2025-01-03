@@ -1,0 +1,104 @@
+/* Загальний стиль для карток */
+.post-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Розмір картки */
+    gap: 20px;
+    padding: 20px;
+}
+
+.post-card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.post-card:hover {
+    transform: scale(1.05); /* Збільшується при наведенні */
+    background-color: #f1f1f1; /* Легке затемнення при наведенні */
+}
+
+/* Назва картки */
+.card-title {
+    background-color: #fff;
+    padding: 10px;
+    font-size: 16px; /* Зменшений шрифт */
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Лівий верхній кут: Аватар і ім'я автора */
+.post-author {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    opacity: 0; /* Спочатку приховано */
+    transition: opacity 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.7); /* Білий фон */
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+.post-card:hover .post-author {
+    opacity: 1; /* Показуємо при наведенні на картку */
+}
+
+.author-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.author-name {
+    font-size: 12px; /* Зменшений шрифт */
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+/* Права верхня частина: Іконка поширення */
+.post-share {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0; /* Спочатку приховано */
+    transition: opacity 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.7); /* Білий фон */
+    padding: 5px; /* Зменшуємо відступи навколо іконки */
+    border-radius: 50%; /* Заокруглюємо фон */
+    display: flex;
+    align-items: center; /* Центруємо по вертикалі */
+    justify-content: center; /* Центруємо по горизонталі */
+    cursor: pointer;
+}
+
+.post-card:hover .post-share {
+    opacity: 1; /* Показуємо при наведенні на картку */
+}
+
+/* Виправлення для іконки */
+.post-share svg {
+    width: 20px; /* Задаємо точні розміри */
+    height: 20px;
+    fill: #333;
+}
+
+/* Основна частина картки: Прев'ю */
+.post-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

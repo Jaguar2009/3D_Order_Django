@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Створити замовлення{% endblock %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/create_order.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="create-order-container">
+    <form id="create-order-form" class="create-order-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Створити замовлення</h2>
+
+        <!-- Поле для назви -->
+        <div class="form-group">
+            <input type="text" name="title" id="title" placeholder="Назва замовлення" class="order-title {% if form.title.errors %}error{% endif %}" value="{{ form.title.value }}">
+            {% if form.title.errors %}
+                <div class="error-message">
+                    {% for error in form.title.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Термін доставки -->
+        <div class="form-group">
+            {{ form.delivery_time }}
+            {% if form.delivery_time.errors %}
+                <div class="error-message">
+                    {% for error in form.delivery_time.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Поле для коментарів -->
+        <div class="form-group">
+            <textarea name="comments" id="comments" placeholder="Коментарі" class="order-comments {% if form.comments.errors %}error{% endif %}">{{ form.comments.value }}</textarea>
+            {% if form.comments.errors %}
+                <div class="error-message">
+                    {% for error in form.comments.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Поле для завантаження файлів -->
+        <div class="form-group">
+            <label class="upload-label" for="file-upload">
+                Завантажити файли
+                <input type="file" name="media_files" id="file-upload" accept="image/*, video/*, .obj, .stl" multiple onchange="addFilesToList('file-upload', 'files-list')">
+            </label>
+            <ul id="files-list" class="file-list"></ul>
+
+            {% if form.files.errors %}
+                <div class="error-message">
+                    {% for error in form.files.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="submit-button">Створити замовлення</button>
+    </form>
+</div>
+
+<script src="{% static 'js/create_order.js' %}"></script>
+{% endblock %}

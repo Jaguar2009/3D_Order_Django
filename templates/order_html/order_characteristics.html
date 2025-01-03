@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Характеристики замовлення{% endblock %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/order_characteristics.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="order-characteristics-container">
+    <h2>Характеристики для файлу: {{ file_name }}</h2>
+
+    <form method="post" class="order-characteristics-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="form-buttons">
+            <button type="submit" class="submit-button">Зберегти та продовжити</button>
+            {% if file_index > 0 %}
+                <a href="{% url 'order_characteristics' order_id=order_id file_index=file_index|add:'-1' %}" class="back-button">Назад</a>
+            {% endif %}
+        </div>
+    </form>
+
+    {% if form.errors %}
+        <div class="alert alert-danger mt-3">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="file-progress">
+        <p>Файл {{ file_index }} з {{ total_files }}</p>
+    </div>
+</div>
+{% endblock %}

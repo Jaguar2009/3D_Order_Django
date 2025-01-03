@@ -1,0 +1,310 @@
+/* Загальні стилі */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Забороняємо горизонтальний скрол */
+}
+
+/* Стилі для header */
+header {
+    background-color: #003366; /* Темно-синій */
+    color: white;
+    display: flex;
+    justify-content: flex-start; /* Вирівнюємо елементи зліва */
+    align-items: center;
+    padding: 10px 30px;
+    z-index: 2; /* Піднімаємо header вгору */
+}
+
+/* Стилі для кнопки меню */
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 20px;
+    width: 25px;
+    cursor: pointer;
+    margin-right: 10px; /* Відстань між кнопкою і логотипом */
+    order: 1; /* Задаємо, щоб кнопка меню була першою */
+}
+
+.bar {
+    background-color: white;
+    height: 4px;
+    width: 100%;
+}
+
+/* Стилі для логотипа */
+.logo-container {
+    display: inline-block;
+    margin-left: 20px; /* Відстань між три рисками і логотипом */
+    height: 30px; /* Висота логотипа */
+    order: 2; /* Логотип буде після кнопки меню */
+}
+
+.logo {
+    height: 100%; /* Логотип займає всю висоту контейнера */
+    width: auto;
+}
+
+/* Стилі для поля пошуку */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px; /* Відстань між логотипом і полем пошуку */
+    order: 3; /* Поле пошуку буде після логотипу */
+}
+
+.search-input {
+    width: 750px;
+    height: 25px;
+    padding: 5px;
+    border: 2px solid #003366;
+    border-radius: 5px 0 0 5px;
+    font-size: 16px;
+}
+
+/* Стилі для кнопки мікрофона */
+.search-btn {
+    background-color: #003366;
+    color: white;
+    border: 2px solid #003366;
+    border-left: none; /* Видаляємо ліву обводку, щоб з’єднати з полем */
+    border-radius: 0 5px 5px 0;
+    height: 30.5px; /* Висота кнопки дорівнює висоті поля */
+    padding: 5px 10px; /* Відступи для кнопки */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease; /* Плавне підсвічування */
+    box-shadow: 0 0 0 2px white; /* Додаємо білу рамку */
+}
+
+/* Ефект наведення */
+.search-btn:hover {
+    background-color: #005bb5; /* Світліший синій при наведенні */
+}
+
+/* Стилі для іконки мікрофона */
+.search-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: white; /* Білий колір іконки */
+}
+
+/* Анімація градієнта */
+@keyframes gradientAnimation {
+    0% { background-color: #005bb5; }
+    25% { background-color: #00b5ad; }
+    50% { background-color: #b5b500; }
+    75% { background-color: #b500b5; }
+    100% { background-color: #005bb5; }
+}
+
+/* Додавання класу для градієнтного ефекту */
+.search-btn.gradient {
+    animation: gradientAnimation 3s infinite linear;
+}
+
+/* Модальне вікно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Напівпрозорий фон */
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    width: 50%;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.create-post-btn {
+    background-color: #003366;
+    color: white;
+    border: 2px solid #003366;
+    border-radius: 50%;
+    width: 30px; /* Розмір кнопки */
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 0 0 2px white;
+    margin-left: 30px; /* Відстань між пошуком і кнопкою створення поста */
+    order: 4; /* Кнопка створення поста після пошуку */
+}
+
+.create-post-btn:hover {
+    background-color: #005bb5; /* Світліший синій при наведенні */
+}
+
+.create-post-btn svg {
+    width: 40px;
+    height: 20px;
+    fill: white; /* Білий колір іконки */
+}
+
+/* Стилі для кнопки кошика */
+.cart-btn {
+    background-color: #003366;
+    color: white;
+    border: 2px solid #003366;
+    border-radius: 50%;
+    width: 30px; /* Розмір кнопки */
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 0 0 2px white;
+    margin-left: 30px; /* Відстань між полем пошуку і кнопкою кошика */
+    order: 5; /* Кошик буде після пошуку */
+}
+
+/* Ефект наведення на кнопку кошика */
+.cart-btn:hover {
+    background-color: #005bb5;
+}
+
+/* Іконка на кнопці кошика */
+.cart-btn svg {
+    width: 40px;
+    height: 20px;
+    fill: white;
+}
+
+/* Стилі для кнопки профілю */
+.profile-btn {
+    background-color: #003366;
+    color: white;
+    border: 2px solid #003366;
+    border-radius: 50%;
+    width: 30px; /* Розмір кнопки */
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 0 0 2px white;
+    margin-left: 30px; /* Відстань між кошиком і кнопкою профілю */
+    order: 6; /* Профіль буде після кошика */
+}
+
+/* Ефект наведення на кнопку профілю */
+.profile-btn:hover {
+    background-color: #005bb5;
+}
+
+/* Іконка на кнопці профілю */
+.profile-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
+
+/* Стилі для аватарки користувача на кнопці профілю */
+.profile-btn img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+/* Стилі для бічної панелі */
+.sidebar {
+    position: fixed;
+    top: 60px; /* Відстань від верхнього краю (під header) */
+    left: -250px; /* Початкове значення (бічна панель прихована) */
+    width: 250px;
+    height: 100%;
+    background-color: #F9F9F9; /* Світло-сірий фон */
+    transition: left 0.5s ease-in-out;
+    padding-top: 0; /* Панель починається з верхнього краю */
+    z-index: 1; /* Тепер sidebar з'являється поверх основного контенту */
+}
+
+.sidebar.active {
+    left: 0; /* Панель відкривається */
+}
+
+/* Стилі для навігаційних посилань */
+.sidebar nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #333333; /* Текст темно-сірий */
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.sidebar-link:hover {
+    color: #003366; /* Синій колір при наведенні */
+}
+
+/* Стилі для SVG іконок */
+.sidebar-link svg {
+    margin-right: 10px; /* Простір між іконкою і текстом */
+    fill: currentColor; /* Застосовує колір до іконки */
+    width: 20px;
+    height: 20px;
+}
+
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; /* Простір між рисками */
+    align-items: center;
+    width: 40px; /* Ширина всього блоку toggle */
+    height: 30px; /* Висота всього блоку toggle */
+    cursor: pointer; /* Змінює курсор на pointer при наведенні */
+}
+
+.menu-toggle .bar {
+    display: block;
+    width: 90%; /* Ширина рисок */
+    height: 6px; /* Висота рисок */
+    background-color: #fff; /* Білий колір */
+    border-radius: 3px; /* Згладжені краї */
+    transition: all 0.3s ease; /* Анімація */
+}
+
+/* Медіа запити для адаптивності */
+@media (max-width: 768px) {
+    body {
+        margin-left: 0; /* Для мобільних пристроїв */
+    }
+}

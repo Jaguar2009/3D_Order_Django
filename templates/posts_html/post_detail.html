@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="outer-card">
+  <div class="inner-card">
+    <!-- Верхній колонтитул -->
+    <div class="header">
+      <img src="{{ user.avatar.url }}" alt="Avatar" class="avatar">
+      <h3 class="author-name">{{ post.author.first_name }}</h3>
+    </div>
+
+    <!-- Зовнішня картка для медіа та кнопок -->
+    <div class="carousel-outer-card">
+      <!-- Картка з кнопками і медіа -->
+      <div class="carousel-container">
+        <!-- Картка з медіа -->
+        <div class="media-card">
+          <div id="carouselExample" class="carousel">
+            <div class="carousel-inner">
+              {% for media in media_files %}
+              <div class="carousel-item{% if forloop.first %} active{% endif %}">
+                <img src="{{ media.file.url }}" class="d-block" alt="Media">
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Кнопки управління -->
+        <div class="carousel-controls">
+          <button class="carousel-control-prev" id="prevBtn" aria-label="Previous">
+            &#10094;
+          </button>
+          <button class="carousel-control-next" id="nextBtn" aria-label="Next">
+            &#10095;
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="outer-card">
+<!-- Картка з деталями та файлами -->
+<div class="details-card">
+  <div class="tabs">
+    <button class="tab-button active" data-target="details">Деталі моделі</button>
+    <button class="tab-button" data-target="files">Файли</button>
+  </div>
+
+  <!-- Деталі моделі -->
+  <div class="tab-pane details active" id="details">
+    <h3>Деталі моделі</h3>
+    <p class="model-description">{{ post.description }}</p>
+    <p><strong>Категорія:</strong> <span class="category">{{ post.category }}</span></p>
+  </div>
+
+  <!-- 3D файли -->
+  <div class="tab-pane files" id="files">
+    <h2>3D файли:</h2>
+    {% for object_3d in object_3d_files %}
+      <div class="file-item">
+        <span class="file-name">{{ object_3d.file.name }}</span> <!-- Назва файлу -->
+        <a href="{{ object_3d.file.url }}" class="download-link" download>Скачати 3D файл</a>
+      </div>
+    {% empty %}
+      <p class="no-files">3D файли не знайдені.</p>
+    {% endfor %}
+  </div>
+</div>
+</div>
+
+<script src="{% static 'js/post_detail.js' %}"></script>
+
+{% endblock %}

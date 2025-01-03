@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Створити пост{% endblock %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/create_post.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="create-post-container">
+    <form id="create-post-form" class="create-post-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Створити пост</h2>
+
+        <!-- Поле для назви -->
+        <div class="form-group">
+            <input type="text" name="title" id="title" placeholder="Назва" class="post-title {% if form.title.errors %}error{% endif %}" value="{{ form.title.value }}">
+            {% if form.title.errors %}
+                <div class="error-message">
+                    {% for error in form.title.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Поле для опису -->
+        <div class="form-group">
+            <textarea name="description" id="description" placeholder="Опис" class="post-description {% if form.description.errors %}error{% endif %}">{{ form.description.value }}</textarea>
+            {% if form.description.errors %}
+                <div class="error-message">
+                    {% for error in form.description.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="category">Категорія</label>
+            <select name="category" id="category" class="category-select">
+                {% for value, name in form.category.field.choices %}
+                <option value="{{ value }}" {% if form.category.value == value %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+            {% if form.category.errors %}
+                <div class="error-message">
+                    {% for error in form.category.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Поле для завантаження медіа файлів -->
+        <div class="form-group">
+            <label class="upload-label">
+                Завантажити медіа файли
+                <input type="file" name="media_files" id="media-upload" accept="image/*,video/*" multiple onchange="addFilesToList('media-upload', 'media-files-list')">
+            </label>
+            <ul id="media-files-list" class="file-list"></ul>
+            {% if form.media_files.errors %}
+                <div class="error-message">
+                    {% for error in form.media_files.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Поле для завантаження 3D об'єктів -->
+        <div class="form-group">
+            <label class="upload-label">
+                Завантажити 3D об'єкти
+                <input type="file" name="object_3d_files" id="object-upload" accept=".obj,.stl" multiple onchange="addFilesToList('object-upload', 'object-3d-files-list')">
+            </label>
+            <ul id="object-3d-files-list" class="file-list"></ul>
+            {% if form.object_3d_files.errors %}
+                <div class="error-message">
+                    {% for error in form.object_3d_files.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Поле для завантаження прев'ю -->
+        <div class="form-group">
+            <label class="upload-label">
+                Завантажити прев'ю
+                <input type="file" name="preview_image" id="preview-upload" accept="image/*" onchange="addFilesToList('preview-upload', 'preview-files-list')">
+            </label>
+            <ul id="preview-files-list" class="file-list"></ul>
+            {% if form.preview_image.errors %}
+                <div class="error-message">
+                    {% for error in form.preview_image.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="publish-button">Опублікувати</button>
+    </form>
+</div>
+
+<script src="{% static 'js/create_post.js' %}"></script>
+{% endblock %}

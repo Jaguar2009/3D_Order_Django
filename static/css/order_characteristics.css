@@ -1,0 +1,73 @@
+/* Основний контейнер для сторінки характеристик */
+.order-characteristics-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Стиль для заголовка */
+.order-characteristics-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Стиль для кнопок */
+.order-characteristics-form .submit-button,
+.order-characteristics-form .back-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.order-characteristics-form .submit-button:hover,
+.order-characteristics-form .back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Стиль для форми */
+.order-characteristics-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Стиль для полів форми */
+.order-characteristics-form input,
+.order-characteristics-form select,
+.order-characteristics-form textarea {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+/* Стиль для помилок */
+.error {
+    border-color: red;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Стиль для прогресу файлу */
+.file-progress {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}

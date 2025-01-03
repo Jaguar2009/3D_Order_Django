@@ -1,0 +1,193 @@
+/* Контейнер форми */
+.create-post-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Форма */
+.create-post-form {
+    width: 100%;
+    max-width: 800px; /* Збільшена максимальна ширина */
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Відступи між елементами */
+    align-items: stretch; /* Розтягуємо елементи на всю ширину */
+}
+
+/* Заголовок */
+.create-post-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Поле Назва */
+.post-title {
+    font-size: 16px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Перелік вибраних файлів */
+.file-list {
+    width: 100%; /* Ширина на весь контейнер */
+    margin-bottom: 15px;
+}
+
+.file-list label {
+    font-size: 16px;
+    color: #333;
+}
+
+.file-list ul {
+    padding-left: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Поля для завантаження */
+.upload-label {
+    display: block;
+    width: 100%; /* Ширина на весь контейнер */
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.upload-label:hover {
+    background-color: #e0e0e0;
+}
+
+.upload-label input {
+    display: none; /* Приховує поле input */
+}
+
+/* Кнопка публікації */
+.publish-button {
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 10px 15px;
+    width: 100%; /* Розтягуємо кнопку на всю ширину */
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.publish-button:hover {
+    background-color: #0056b3; /* Синій колір при наведенні */
+}
+
+/* Виділення полів з помилками */
+.error {
+    border-color: red;
+}
+
+/* Відображення повідомлень про помилки */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Поле для опису */
+.post-description {
+    min-height: 100px;
+    font-size: 16px;
+    resize: vertical;
+    max-height: 300px; /* Максимальна висота для опису */
+    width: 100%; /* Розтягуємо на всю ширину */
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Відображення файлів у списках */
+.file-list {
+    width: 100% !important; /* Розтягуємо список на всю ширину */
+    list-style-type: none;
+    padding: 0;
+}
+
+.file-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background: #f1f1f1;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.file-list li button {
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Поле категорії */
+.category-select {
+    font-size: 16px;
+    width: 100%; /* Розтягуємо на всю ширину */
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    box-sizing: border-box;
+    cursor: pointer;
+    appearance: none; /* Забирає стандартні стилі select */
+}
+
+/* Іконка стрілки для вибору (тільки для браузерів, які підтримують) */
+.category-select::-ms-expand {
+    display: none;
+}
+
+/* Стиль при наведенні */
+.category-select:hover {
+    background-color: #e0e0e0;
+}
+
+/* Стиль при фокусі */
+.category-select:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+}
+
+/* Виділення полів з помилками */
+.category-select.error {
+    border-color: red;
+}
+
+/* Відображення повідомлень про помилки */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
