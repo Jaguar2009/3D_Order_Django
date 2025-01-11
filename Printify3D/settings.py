@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'posts',
     'reviews',
     'search',
+    'admin_panel',
 ]
 
 MIDDLEWARE = [

@@ -1,33 +1,73 @@
 {% extends 'base.html' %}
 
+{% block title %}Кошик{% endblock %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
 {% block body %}
-<h2>Кошик</h2>
+<div class="cart-container">
+    <h2>Ваш кошик</h2>
 
-{% if cart_items %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Назва замовлення</th>
-                <th>Користувач</th>
-                <th>Терміновість</th>
-                <th>Дії</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in cart_items %}
-                <tr>
-                    <td>{{ item.order.name }}</td>
-                    <td>{{ item.order.user.first_name }}</td>
-                    <td>{{ item.order.delivery_time }}</td>
-                    <td>
-                        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Видалити</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Одна форма для оновлення кількості товарів і для покупки -->
+    <form method="POST" class="cart-form">
+        {% csrf_token %}
+        {% for cart_item in cart_items %}
+        <div class="order-card">
+            <div class="order-header">
+                <h3>{{ cart_item.order.title }}</h3>
+                <p>Дата створення: {{ cart_item.order.created_at|date:"d/m/Y" }}</p>
+                <p><strong>Коментар:</strong> {{ cart_item.order.comments }}</p>
+            </div>
 
-{% else %}
-    <p>Ваш кошик порожній.</p>
-{% endif %}
+            <div class="order-files">
+                <h4>Файли в замовленні:</h4>
+                {% for order_file in cart_item.order.files.all %}
+                <div class="file-card">
+                    <p><strong>Назва файлу:</strong> {{ order_file.file_name }}</p>
+                    <div class="file-characteristics">
+                        <p><strong>Матеріал:</strong> {{ order_file.characteristics.material_type }}</p>
+                        <p><strong>Колір:</strong> {{ order_file.characteristics.material_color }}</p>
+                        <p><strong>Розмір:</strong> {{ order_file.characteristics.size }} мм</p>
+                        <p><strong>Копії:</strong> {{ order_file.characteristics.copies }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="order-summary">
+                <label for="quantity_{{ cart_item.id }}">
+                    <strong>Кількість у кошику:</strong>
+                </label>
+                <div class="quantity-container">
+                    <input
+                        type="number"
+                        name="quantity_{{ cart_item.id }}"
+                        id="quantity_{{ cart_item.id }}"
+                        value="{{ cart_item.quantity }}"
+                        min="1"
+                        class="quantity-input">
+                </div>
+
+                <label for="selected_orders_{{ cart_item.id }}">
+                    <strong>Купити?</strong>
+                </label>
+                <input
+                    type="checkbox"
+                    name="selected_orders"
+                    value="{{ cart_item.id }}"
+                    id="selected_orders_{{ cart_item.id }}">
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <!-- Окремі кнопки для кожної операції -->
+            <button type="submit" name="action" value="update" class="update-button">Оновити</button>
+            <button type="submit" name="action" value="purchase" class="purchase-button">Купити вибрані</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

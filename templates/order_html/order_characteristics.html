@@ -13,7 +13,43 @@
 
     <form method="post" class="order-characteristics-form">
         {% csrf_token %}
-        {{ form.as_p }}
+
+        <!-- Поле для розміру -->
+        <div class="form-field {% if form.size.errors %}error{% endif %}">
+            <label for="id_size" class="form-label">Розмір:</label>
+            {{ form.size }}
+            {% for error in form.size.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Поле для заповнення -->
+        <div class="form-field {% if form.filling.errors %}error{% endif %}">
+            <label for="id_filling" class="form-label">Заповнення (%):</label>
+            {{ form.filling }}
+            {% for error in form.filling.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Поле для копій -->
+        <div class="form-field {% if form.copies.errors %}error{% endif %}">
+            <label for="id_copies" class="form-label">Кількість копій:</label>
+            {{ form.copies }}
+            {% for error in form.copies.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <!-- Інші поля форми -->
+        {% for field in form %}
+            {% if field.name not in "size copies filling" %}
+                <div class="form-field">
+                    <label for="id_{{ field.name }}" class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endif %}
+        {% endfor %}
 
         <div class="form-buttons">
             <button type="submit" class="submit-button">Зберегти та продовжити</button>
@@ -23,20 +59,8 @@
         </div>
     </form>
 
-    {% if form.errors %}
-        <div class="alert alert-danger mt-3">
-            <ul>
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-
     <div class="file-progress">
-        <p>Файл {{ file_index }} з {{ total_files }}</p>
+        <p>Файл {{ file_index|add:1 }} з {{ total_files }}</p> <!-- Додаємо 1 лише для відображення -->
     </div>
 </div>
 {% endblock %}

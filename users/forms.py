@@ -141,10 +141,9 @@ class RegistrationForm(forms.ModelForm):
         password = self.cleaned_data.get("password")
         confirm_password = self.cleaned_data.get("confirm_password")
         if len(confirm_password) < 8:
-            raise ValidationError("Підтвердження пароля повинно містити щонайменше 8 символів.")  # Помилка, якщо символів менше
-
+            raise ValidationError("Підтвердження пароля повинно містити щонайменше 8 символів.")
         if password != confirm_password:
-            raise ValidationError("Паролі не збігаються.")  # Помилка, якщо паролі не збігають
+            raise ValidationError("Паролі не збігаються.")
 
         return confirm_password
 
@@ -160,14 +159,12 @@ class RegistrationForm(forms.ModelForm):
         if phone_number and User.objects.filter(phone_number=phone_number).exists():
             raise ValidationError("Цей номер телефону вже зайнятий.")
 
-        # Для українських номерів
         if self.cleaned_data.get('country') == "Ukraine":
             if not phone_number.startswith("+380"):
                 raise ValidationError("Номер телефону для України повинен починатися з +380.")
             if len(phone_number) != 13:
                 raise ValidationError("Номер телефону для України повинен містити 13 символів.")
 
-        # Для американських номерів
         elif self.cleaned_data.get('country') == "USA":
             if not phone_number.startswith("+1"):
                 raise ValidationError("Номер телефону для США повинен починатися з +1.")
@@ -177,7 +174,6 @@ class RegistrationForm(forms.ModelForm):
         return phone_number
 
 
-
     def save(self, commit=True):
         user = super().save(commit=False)
         user.password = make_password(self.cleaned_data["password"])
@@ -185,7 +181,6 @@ class RegistrationForm(forms.ModelForm):
         avatar_files = os.listdir(avatars_path)
         random_avatar = random.choice(avatar_files)
 
-        # Додайте аватар користувачу
         user.avatar = f'avatars_registration/{random_avatar}'
         if commit:
             user.save()

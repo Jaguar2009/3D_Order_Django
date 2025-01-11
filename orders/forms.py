@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from .models import Order, OrderFile, ModelCharacteristics
 
 
-# Форма для замовлення
 class OrderForm(forms.ModelForm):
     files = forms.FileField(required=False)
     title = forms.CharField(required=False)
@@ -44,7 +43,6 @@ class OrderForm(forms.ModelForm):
                 raise ValidationError("Файли 3D об'єктів мають бути у форматі STL.")
         return files
 
-# Форма для завантаження файлів
 class OrderFileForm(forms.ModelForm):
     class Meta:
         model = OrderFile
@@ -54,45 +52,40 @@ class OrderFileForm(forms.ModelForm):
 class ModelCharacteristicsForm(forms.ModelForm):
     size = forms.FloatField(required=False)
     copies = forms.FloatField(required=False)
+    filling = forms.FloatField(required=False)
     class Meta:
         model = ModelCharacteristics
         fields = ['material_type', 'material_color', 'size', 'resolution', 'support_structure', 'post_processing',
-                  'copies']
+                  'copies', 'filling']
 
-    # Валідація для обов'язкових полів
     def clean_size(self):
         size = self.cleaned_data.get('size')
+        if size is None:
+            raise forms.ValidationError("Поле не може бути пустим.")
         if size <= 0:
             raise forms.ValidationError("Розмір має бути додатнім числом.")
+        if size > 200:
+            raise forms.ValidationError("Максимальне значення розміру — 200.")
         return size
 
     def clean_copies(self):
         copies = self.cleaned_data.get('copies')
+        if copies is None:
+            raise forms.ValidationError("Це поле є обов'язковим.")
         if copies <= 0:
             raise forms.ValidationError("Кількість копій повинна бути більше нуля.")
-        return copies
+        if not float(copies).is_integer():
+            raise forms.ValidationError("Кількість копій повинна бути цілим числом.")
+        return int(copies)
 
-    # Додавання кастомних повідомлень для кожного поля
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['material_type'].error_messages = {
-            'required': 'Це поле є обов\'язковим!',
-        }
-        self.fields['material_color'].error_messages = {
-            'required': 'Це поле є обов\'язковим!',
-        }
-        self.fields['size'].error_messages = {
-            'required': 'Це поле є обов\'язковим!',
-        }
-        self.fields['resolution'].error_messages = {
-            'required': 'Це поле є обов\'язковим!',
-        }
-        self.fields['support_structure'].error_messages = {
-            'required': 'Це поле є обов\'язковим!',
-        }
-        self.fields['post_processing'].error_messages = {
-            'required': 'Це поле є обов\'язковим!',
-        }
-        self.fields['copies'].error_messages = {
-            'required': 'Це поле є обов\'язковим!',
-        }
+    def clean_filling(self):
+        filling = self.cleaned_data.get('filling')
+        if filling is None:
+            raise forms.ValidationError("Це поле є обов'язковим.")
+        if filling <= 0:
+            raise forms.ValidationError("Заповнення повинно бути додатнім числом.")
+        if filling > 100:
+            raise forms.ValidationError("Максимальне значення заповнення — 100.")
+        return filling
+
+

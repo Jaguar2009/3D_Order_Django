@@ -40,10 +40,16 @@
 .order-characteristics-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
-/* Стиль для полів форми */
+/* Поля для size і copies меншого розміру */
+.form-field input#id_size,
+.form-field input#id_copies {
+    width: 97%; /* Менша ширина, щоб вписувались по центру */
+}
+
+/* Загальний стиль для полів форми */
 .order-characteristics-form input,
 .order-characteristics-form select,
 .order-characteristics-form textarea {
@@ -54,9 +60,18 @@
     width: 100%;
 }
 
+/* Стиль для підписів до полів */
+.form-label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    display: block; /* Розташування підпису над полем */
+    text-align: left; /* Вирівнювання по лівому краю */
+}
+
 /* Стиль для помилок */
-.error {
-    border-color: red;
+.form-field.error input {
+    border-color: red; /* Червона рамка для полів з помилками */
 }
 
 .error-message {
@@ -70,4 +85,13 @@
     text-align: center;
     margin-top: 20px;
     color: #333;
+}
+
+/* Поле для заповнення */
+.form-field input#id_filling {
+    width: 97%; /* Менша ширина, щоб виглядало пропорційно */
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }

@@ -33,7 +33,6 @@ class Order(models.Model):
     title = models.CharField(max_length=255, verbose_name="Назва замовлення")
     delivery_time = models.CharField(max_length=50, choices=DELIVERY_TIME_CHOICES, default='Standard')
     comments = models.TextField(verbose_name="Коментарі")
-    created_at = models.DateTimeField(default=timezone.now, verbose_name="Час створення")
 
     def __str__(self):
         return f"Замовлення: {self.title} ({self.user.first_name})"
@@ -50,20 +49,24 @@ class OrderFile(models.Model):
 
 class ModelCharacteristics(models.Model):
     order_file = models.OneToOneField(OrderFile, on_delete=models.CASCADE, related_name="characteristics")
-    material_type = models.CharField(max_length=10, choices=MaterialType.choices)
-    material_color = models.CharField(max_length=10, choices=MaterialColor.choices)
+    material_type = models.CharField(max_length=10, choices=MaterialType.choices, default='PLA')
+    material_color = models.CharField(max_length=10, choices=MaterialColor.choices, default='Black')
     size = models.FloatField()
     resolution = models.CharField(max_length=50, choices=[('High', 'Висока'),
                                                           ('Medium', 'Середня'),
-                                                          ('Low', 'Низька')])
+                                                          ('Low', 'Низька')],
+                                                          default='Medium')
     support_structure = models.CharField(max_length=50, choices=[('With Support', 'З підтримками'),
-                                                                 ('Without Support', 'Без підтримок')])
+                                                                 ('Without Support', 'Без підтримок')],
+                                                                 default='Without Support')
     post_processing = models.CharField(max_length=50,
                                        choices=[('None', 'Без обробки'),
                                                 ('Sandblasting', 'Піскоструминна обробка'),
                                                 ('Painting', 'Лакування'),
-                                                ('Pre-Painting', 'Підготовка до фарбування')])
+                                                ('Pre-Painting', 'Підготовка до фарбування')],
+                                                default='None')
     copies = models.PositiveIntegerField(default=1)
+    filling = models.FloatField()
 
     def __str__(self):
         return f"Характеристики для {self.order_file.file_name}"
@@ -76,3 +79,13 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"Кошик для {self.user.first_name} - {self.order}"
+
+
+class PurchasedOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="purchased_orders")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="purchases")
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(default=timezone.now, verbose_name="Час створення")
+
+    def __str__(self):
+        return f"Купівля: {self.order.title} ({self.user.first_name})"

@@ -4,6 +4,6 @@ from django.shortcuts import render
 @login_required
 def home(request):
     context = {
-        'user': request.user,  # Передаємо об'єкт користувача
+        'user': request.user,
     }
     return render(request, 'core_html/home.html', context)

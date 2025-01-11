@@ -80,6 +80,11 @@
                 <li><a href="{% url 'create_order' %}" class="sidebar-link">
                     <span>Створити замовлення</span>
                 </a></li>
+                <li>
+                    {% if user.is_authenticated and user.role == 'admin' or user.role == 'moderator' %}
+                        <a href="{% url 'admin_orders' %}">Адмін Панель</a>
+                    {% endif %}
+                </li>
             </ul>
         </nav>
     </div>

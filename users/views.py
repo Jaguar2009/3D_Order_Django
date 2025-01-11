@@ -35,14 +35,14 @@ def user_login(request):
 
 @login_required
 def edit_profile(request):
-    user = request.user  # Отримуємо поточного користувача
+    user = request.user
     if request.method == 'POST':
-        form = ProfileEditForm(request.POST, request.FILES, instance=user)  # Додано request.FILES
+        form = ProfileEditForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
-            form.save()  # Зберігаємо зміни
+            form.save()
             return redirect(reverse('home'))
     else:
-        form = ProfileEditForm(instance=user)  # Заповнюємо форму даними користувача
+        form = ProfileEditForm(instance=user)
 
     return render(request, 'tasks_html/edit_profile.html', {'form': form})
 
@@ -57,9 +57,9 @@ def user_profile(request):
 @login_required(login_url='/login/')
 def delete_profile(request):
     if request.method == 'POST':
-        request.user.delete()  # Видалити користувача
+        request.user.delete()
         return redirect(reverse('home'))
-    return redirect('user_profile')  # Відображення шаблону підтвердження
+    return redirect('user_profile')
 
 @login_required(login_url='/login/')
 def user_logout(request):

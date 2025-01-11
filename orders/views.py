@@ -1,9 +1,13 @@
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.forms import modelform_factory
-
+from django.views.decorators.csrf import csrf_exempt
 from .forms import OrderForm, ModelCharacteristicsForm
-from .models import Order, OrderFile, ModelCharacteristics, Cart
+from .models import Order, OrderFile, ModelCharacteristics, Cart, PurchasedOrder
+from stl import mesh
+import numpy as np
 
 
 def create_order(request):
@@ -12,7 +16,7 @@ def create_order(request):
         if form.is_valid():
             # Створення замовлення
             order = form.save(commit=False)
-            order.user = request.user  # Задати користувача
+            order.user = request.user
             order.save()
 
             # Збереження файлів
@@ -31,48 +35,73 @@ def order_characteristics(request, order_id, file_index):
     order = Order.objects.get(id=order_id, user=request.user)
     files = order.files.all()
 
+    if file_index < 0 or file_index >= files.count():
+        return redirect('some_error_page')
+
     current_file = files[file_index]
 
+    characteristics = ModelCharacteristics.objects.filter(order_file=current_file).first()
+
     if request.method == 'POST':
-        form = ModelCharacteristicsForm(request.POST)
+        form = ModelCharacteristicsForm(request.POST, instance=characteristics)
         if form.is_valid():
             characteristics = form.save(commit=False)
             characteristics.order_file = current_file
             characteristics.save()
 
-            # Перехід до наступного файлу
             if file_index + 1 < files.count():
                 return redirect('order_characteristics', order_id=order.id, file_index=file_index + 1)
             else:
-                # Після останнього файлу додати замовлення до кошика
                 Cart.objects.create(user=request.user, order=order)
                 return redirect('cart')
-
     else:
-        form = ModelCharacteristicsForm()
+        form = ModelCharacteristicsForm(instance=characteristics)
 
     return render(request, 'order_html/order_characteristics.html', {
         'form': form,
-        'file_index': file_index + 1,
+        'file_index': file_index,
         'total_files': files.count(),
         'file_name': current_file.file_name,
-        'order_id': order.id,  # Передаємо order_id в шаблон
+        'order_id': order.id,
     })
 
 
 @login_required
 def view_cart(request):
-    # Отримуємо всі елементи кошика для поточного користувача
     cart_items = Cart.objects.filter(user=request.user)
 
+    if request.method == "POST":
+        action = request.POST.get('action')
+
+        if action == 'update':
+            for item in cart_items:
+                quantity_field_name = f'quantity_{item.id}'
+                new_quantity = request.POST.get(quantity_field_name)
+                try:
+                    new_quantity = int(new_quantity)
+                    if new_quantity <= 0:
+                        new_quantity = 1
+                except (ValueError, TypeError):
+                    new_quantity = 1
+
+                if item.quantity != new_quantity:
+                    item.quantity = new_quantity
+                    item.save()
+
+        elif action == 'purchase':
+            selected_orders = request.POST.getlist('selected_orders')
+            if selected_orders:
+                with transaction.atomic():
+                    for cart_item_id in selected_orders:
+                        cart_item = Cart.objects.get(id=cart_item_id, user=request.user)
+                        PurchasedOrder.objects.create(
+                            user=request.user,
+                            order=cart_item.order,
+                            quantity=cart_item.quantity
+                        )
+                        cart_item.delete()
+
+        return redirect('cart')
+
     return render(request, 'order_html/cart.html', {'cart_items': cart_items})
-
-
-@login_required
-def remove_from_cart(request, cart_item_id):
-    # Видаляємо конкретний товар з кошика
-    cart_item = Cart.objects.get(id=cart_item_id, user=request.user)
-    cart_item.delete()
-
-    return redirect('cart')
 
