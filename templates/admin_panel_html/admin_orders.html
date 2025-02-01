@@ -11,22 +11,25 @@
     <h2>Куплені замовлення</h2>
     <div class="order-cards-container">
         {% for purchased_order in purchased_orders %}
-        <div class="order-card
-            {% if purchased_order.order.delivery_time == 'Urgent' %}
-                urgent-delivery
-            {% elif purchased_order.order.delivery_time == 'By Agreement' %}
-                by-agreement-delivery
-            {% else %}
-                standard-delivery
-            {% endif %}">
-            <h3>{{ purchased_order.order.title }}</h3>
-            <p><strong>Користувач:</strong> {{ purchased_order.user.get_full_name }}</p>
-            <p><strong>Дата купівлі:</strong> {{ purchased_order.created_at|date:"d/m/Y" }}</p>
-            <p><strong>Терміновість:</strong> {{ purchased_order.order.get_delivery_time_display }}</p>
-            <p><strong>Кількість моделей:</strong> {{ purchased_order.total_copies|default:0 }}</p>
-            <p><strong>Кількість копій:</strong> {{ purchased_order.quantity }}</p>
-        </div>
+        <a href="{% url 'admin_order_details' purchased_order.order.id %}" class="order-card-link">
+            <div class="order-card
+                {% if purchased_order.order.delivery_time == 'Urgent' %}
+                    urgent-delivery
+                {% elif purchased_order.order.delivery_time == 'By Agreement' %}
+                    by-agreement-delivery
+                {% else %}
+                    standard-delivery
+                {% endif %}">
+                <h3>{{ purchased_order.order.title }}</h3>
+                <p><strong>Користувач:</strong> {{ purchased_order.user.first_name }}</p>
+                <p><strong>Дата купівлі:</strong> {{ purchased_order.created_at|date:"d/m/Y" }}</p>
+                <p><strong>Терміновість:</strong> {{ purchased_order.order.get_delivery_time_display }}</p>
+                <p><strong>Кількість моделей:</strong> {{ purchased_order.total_copies|default:0 }}</p>
+                <p><strong>Кількість копій:</strong> {{ purchased_order.quantity }}</p>
+            </div>
+        </a>
         {% endfor %}
     </div>
 </div>
 {% endblock %}
+

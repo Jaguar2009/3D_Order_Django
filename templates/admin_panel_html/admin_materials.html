@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Адмін - Матеріали{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/admin_materials.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Список матеріалів</h1>
+    <a href="{% url 'create_material' %}" class="btn btn-success">Додати матеріал</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Назва</th>
+                <th>Ціна за метр</th>
+                <th>Колір</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materials %}
+            <tr>
+                <td>{{ material.id }}</td>
+                <td>{{ material.parameter_name }}</td>
+                <td>{{ material.parameter_value }}</td>
+                <td>{{ material.color|default:"-" }}</td>
+                <td>
+                    <a href="#" class="btn btn-warning">Редагувати</a>
+                    <a href="#" class="btn btn-danger">Видалити</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Матеріали не знайдено.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

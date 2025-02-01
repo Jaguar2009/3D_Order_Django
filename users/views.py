@@ -1,8 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from .forms import CustomUserLoginForm, ProfileEditForm, RegistrationForm
+from .models import Notification, User
+
 
 def register(request):
     if request.method == 'POST':
@@ -44,7 +46,7 @@ def edit_profile(request):
     else:
         form = ProfileEditForm(instance=user)
 
-    return render(request, 'tasks_html/edit_profile.html', {'form': form})
+    return render(request, 'users_html/edit_profile.html', {'form': form})
 
 @login_required(login_url='/login/')
 def user_profile(request):
@@ -52,7 +54,14 @@ def user_profile(request):
     context = {
         'user': user,
     }
-    return render(request, 'tasks_html/user_profile.html', context)
+    return render(request, 'users_html/user_profile.html', context)
+
+
+@login_required(login_url='/login/')
+def user_profile_by_icon(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    return render(request, 'users_html/user_profile_by_icon.html', {'user': user})
+
 
 @login_required(login_url='/login/')
 def delete_profile(request):
@@ -61,8 +70,17 @@ def delete_profile(request):
         return redirect(reverse('home'))
     return redirect('user_profile')
 
+
 @login_required(login_url='/login/')
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+
+def user_notifications(request):
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'users_html/user_notifications.html', {'notifications': notifications})
+
+
+
 

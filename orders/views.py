@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import modelform_factory
 from django.views.decorators.csrf import csrf_exempt
 from .forms import OrderForm, ModelCharacteristicsForm
-from .models import Order, OrderFile, ModelCharacteristics, Cart, PurchasedOrder
+from .models import Order, OrderFile, ModelCharacteristics, Cart, OrderInfo, ServicePricing
 from stl import mesh
 import numpy as np
+import json
 
 
 def create_order(request):
@@ -94,7 +95,7 @@ def view_cart(request):
                 with transaction.atomic():
                     for cart_item_id in selected_orders:
                         cart_item = Cart.objects.get(id=cart_item_id, user=request.user)
-                        PurchasedOrder.objects.create(
+                        OrderInfo.objects.create(
                             user=request.user,
                             order=cart_item.order,
                             quantity=cart_item.quantity
@@ -105,3 +106,46 @@ def view_cart(request):
 
     return render(request, 'order_html/cart.html', {'cart_items': cart_items})
 
+
+def user_orders(request):
+    # Отримуємо всі замовлення користувача
+    orders = OrderInfo.objects.filter(user=request.user)
+
+    context = {
+        'orders': orders
+    }
+
+    return render(request, 'order_html/user_orders.html', context)
+
+
+def order_details(request, order_id):
+    order_info = get_object_or_404(OrderInfo, id=order_id)
+    order = order_info.order  # Отримуємо об'єкт замовлення
+
+    context = {
+        'order': order,
+        'order_info': order_info,
+    }
+    return render(request, 'order_html/order_details.html', context)
+
+
+@csrf_exempt
+def pay_order(request, order_id):
+    if request.method == "POST":
+        order_info = get_object_or_404(OrderInfo, id=order_id)
+
+        # Перевірка, чи статус підтверджено
+        if order_info.status != "approved":
+            return JsonResponse({"success": False, "error": "Замовлення не підтверджено для оплати."})
+
+        # Перевірка, чи вже оплачено
+        if order_info.order_status == "paid":
+            return JsonResponse({"success": False, "error": "Це замовлення вже оплачено."})
+
+        # Змінюємо статус на "оплачено"
+        order_info.order_status = "paid"
+        order_info.save()
+
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False, "error": "Неправильний метод запиту."})

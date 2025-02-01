@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Деталі замовлення{% endblock %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/admin_order_details.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="admin-order-details-container">
+    <h2>Деталі замовлення: {{ order.title }}</h2>
+    <p><strong>Коментар:</strong> {{ order.comments }}</p>
+
+    {% for order_info in order_infos %}
+        <p><strong>Користувач:</strong> {{ order_info.user.first_name }}</p>
+        <p><strong>Дата створення:</strong> {{ order_info.created_at|date:"d/m/Y" }}</p>
+        <p><strong>Кількість копій:</strong> {{ order_info.quantity }}</p>
+        <p><strong>Статус замовлення:</strong> {{ order_info.get_status_display }}</p>
+
+        <!-- Кнопки підтвердження та відхилення -->
+        {% if order_info.status == 'pending' %}
+            <button type="button" class="btn btn-success" onclick="openConfirmModal({{ order_info.id }})">
+                Підтвердити
+            </button>
+            <button type="button" class="btn btn-danger" onclick="openRejectModal({{ order_info.id }})">
+                Відхилити
+            </button>
+        {% endif %}
+    {% endfor %}
+
+    <!-- Модальні вікна для підтвердження -->
+    {% for order_info in order_infos %}
+        <div id="confirmModal{{ order_info.id }}" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeConfirmModal({{ order_info.id }})">&times;</span>
+                <h5>Введіть витрати матеріалу</h5>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="order_info_id" value="{{ order_info.id }}">
+                    <!-- Витрати матеріалу для кожного файлу -->
+                    <div class="form-group">
+                        {% for file in files %}
+                            <label for="plastic_usage_{{ file.id }}">{{ file.file_name }} (метри)</label>
+                            <input type="number" name="plastic_usage_{{ file.id }}" id="plastic_usage_{{ file.id }}" required class="form-control">
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" name="confirm" class="btn btn-success">Підтвердити</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Модальні вікна для відхилення -->
+    {% for order_info in order_infos %}
+    <div id="rejectModal{{ order_info.id }}" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRejectModal({{ order_info.id }})">&times;</span>
+            <h5>Причина відмови</h5>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="order_info_id" value="{{ order_info.id }}">
+                <div class="form-group">
+                    <label for="rejection_reason{{ order_info.id }}">Причина відмови:</label>
+                    <textarea name="rejection_reason" id="rejection_reason{{ order_info.id }}" rows="4" required></textarea>
+                </div>
+                <button type="submit" name="reject" class="btn btn-danger">Відправити</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+    <h3>Файли замовлення:</h3>
+    <div class="order-files-container">
+        {% for file in files %}
+        <div class="order-file-card">
+            <h4>Файл: {{ file.file_name }}</h4>
+            <p><strong>Посилання:</strong> <a href="{{ file.file.url }}" target="_blank">Завантажити</a></p>
+            {% if file.characteristics %}
+            <ul>
+                <li><strong>Матеріал:</strong> {{ file.characteristics.material_type }}</li>
+                <li><strong>Колір:</strong> {{ file.characteristics.material_color }}</li>
+                <li><strong>Розмір:</strong> {{ file.characteristics.size }}</li>
+                <li><strong>Роздільна здатність:</strong> {{ file.characteristics.resolution }}</li>
+                <li><strong>Опорна конструкція:</strong> {{ file.characteristics.support_structure }}</li>
+                <li><strong>Постобробка:</strong> {{ file.characteristics.post_processing }}</li>
+                <li><strong>Кількість копій:</strong> {{ file.characteristics.copies }}</li>
+                <li><strong>Заповнення:</strong> {{ file.characteristics.filling }}%</li>
+            </ul>
+            {% else %}
+            <p>Характеристики для цього файлу відсутні.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    function openConfirmModal(orderInfoId) {
+        document.getElementById("confirmModal" + orderInfoId).style.display = "block";
+    }
+
+    function closeConfirmModal(orderInfoId) {
+        document.getElementById("confirmModal" + orderInfoId).style.display = "none";
+    }
+
+    function openRejectModal(orderInfoId) {
+        document.getElementById("rejectModal" + orderInfoId).style.display = "block";
+    }
+
+    function closeRejectModal(orderInfoId) {
+        document.getElementById("rejectModal" + orderInfoId).style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        var modals = document.getElementsByClassName("modal");
+        for (var i = 0; i < modals.length; i++) {
+            if (event.target == modals[i]) {
+                modals[i].style.display = "none";
+            }
+        }
+    }
+</script>
+{% endblock %}

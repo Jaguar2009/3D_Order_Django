@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Деталі замовлення{% endblock %}
+
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/order_details.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2>Деталі замовлення</h2>
+    <p><strong>Назва замовлення:</strong> {{ order.title }}</p>
+    <p><strong>Дата оформлення:</strong> {{ order_info.created_at|date:"d M Y" }}</p>
+    <p><strong>Статус:</strong> <span id="order-status">{{ order_info.order_status }}</span></p>
+    <p><strong>Загальна сума:</strong> <span id="total-cost">{{ order_info.total_cost }}</span> грн</p>
+
+    <h3 class="mt-4">Моделі у замовленні</h3>
+    <div class="row">
+        {% for file in order.files.all %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Файл: {{ file.file_name }}</h5>
+                        <p><strong>Матеріал:</strong> {{ file.characteristics.get_material_type_display }}</p>
+                        <p><strong>Колір матеріалу:</strong> {{ file.characteristics.get_material_color_display }}</p>
+                        <p><strong>Розмір:</strong> {{ file.characteristics.size }} мм</p>
+                        <p><strong>Якість друку:</strong> {{ file.characteristics.get_resolution_display }}</p>
+                        <p><strong>Структури підтримки:</strong> {{ file.characteristics.get_support_structure_display }}</p>
+                        <p><strong>Обробка:</strong> {{ file.characteristics.get_post_processing_display }}</p>
+                        <p><strong>Кількість копій:</strong> {{ file.characteristics.copies }}</p>
+                        <p><strong>Заповнення:</strong> {{ file.characteristics.filling }}%</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if order_info.status == "approved" and order_info.order_status == "created" %}
+    <button id="pay-button" class="pay-btn">Оплатити</button>
+    {% endif %}
+</div>
+
+<!-- Модальне вікно -->
+<div id="payment-modal" class="modal">
+    <div class="modal-content">
+        <p>Оплата пройшла успішно!</p>
+        <p>Сума: <span id="modal-total-cost"></span> грн</p>
+        <button id="close-modal">Закрити</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const payButton = document.getElementById("pay-button");
+    const modal = document.getElementById("payment-modal");
+    const closeModal = document.getElementById("close-modal");
+    const orderStatus = document.getElementById("order-status");
+    const totalCost = document.getElementById("total-cost");
+
+    if (payButton) {
+        payButton.addEventListener("click", function () {
+            fetch("{% url 'pay_order' order_info.id %}", {
+                method: "POST",
+                headers: { "X-CSRFToken": "{{ csrf_token }}" },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    orderStatus.textContent = "Оплачено";
+                    payButton.style.display = "none";
+                    document.getElementById("modal-total-cost").textContent = totalCost.textContent;
+                    modal.style.display = "block"; // Показати модальне вікно
+                }
+            });
+        });
+    }
+
+    if (closeModal) {
+        closeModal.addEventListener("click", function () {
+            modal.style.display = "none"; // Закрити модальне вікно
+        });
+    }
+
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none"; // Закрити при кліку за межами модалки
+        }
+    });
+});
+</script>
+
+{% endblock %}

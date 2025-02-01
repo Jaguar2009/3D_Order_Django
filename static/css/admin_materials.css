@@ -1,0 +1,39 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f4f4f4;
+}
+
+.btn {
+    padding: 5px 10px;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+}
+
+.btn-success {
+    background-color: green;
+}
+
+.btn-warning {
+    background-color: orange;
+}
+
+.btn-danger {
+    background-color: red;
+}

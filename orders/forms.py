@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Order, OrderFile, ModelCharacteristics
+from .models import Order, OrderFile, ModelCharacteristics, ServicePricing
 
 
 class OrderForm(forms.ModelForm):
@@ -53,9 +53,10 @@ class ModelCharacteristicsForm(forms.ModelForm):
     size = forms.FloatField(required=False)
     copies = forms.FloatField(required=False)
     filling = forms.FloatField(required=False)
+    color = forms.CharField(max_length=20, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
     class Meta:
         model = ModelCharacteristics
-        fields = ['material_type', 'material_color', 'size', 'resolution', 'support_structure', 'post_processing',
+        fields = ['material', 'size', 'resolution', 'support_structure', 'post_processing',
                   'copies', 'filling']
 
     def clean_size(self):
@@ -87,5 +88,4 @@ class ModelCharacteristicsForm(forms.ModelForm):
         if filling > 100:
             raise forms.ValidationError("Максимальне значення заповнення — 100.")
         return filling
-
 

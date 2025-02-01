@@ -1,50 +1,73 @@
-/* Стилі для карток замовлень */
+/* Основний контейнер для сторінки */
+.admin-orders-container {
+    padding: 20px;
+}
+
+/* Стилі для контейнера карток */
 .order-cards-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    align-items: stretch; /* Вирівнює всі картки по висоті */
+    margin-bottom: 20px; /* Додає відступ знизу, щоб уникнути обрізання останнього ряду */
 }
 
+/* Загальний стиль для карток */
 .order-card {
+    display: flex; /* Використовуємо flexbox для вмісту картки */
+    flex-direction: column; /* Вміст картки розташовується вертикально */
+    justify-content: space-between; /* Розтягуємо елементи для рівномірного розподілу */
     border: 2px solid #ccc;
     padding: 20px;
     border-radius: 8px;
     width: 300px;
-    transition: border 0.3s ease;
+    transition: transform 0.3s ease, border 0.3s ease;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    min-height: 350px; /* Встановлюємо мінімальну висоту картки для однаковості */
+    box-sizing: border-box; /* Враховує padding і border у розмірах елемента */
 }
 
+/* Стиль для заголовків карток */
 .order-card h3 {
     margin-top: 0;
     font-size: 1.25rem;
 }
 
+/* Стиль для параграфів у картках */
 .order-card p {
     margin: 5px 0;
 }
 
-/* Терміновий замовлення */
+/* Термінові замовлення */
 .urgent-delivery {
     border-color: red;
     font-weight: bold;
     border-width: 3px;
 }
 
-/* За попереднім погодженням */
+/* Замовлення за попереднім погодженням */
 .by-agreement-delivery {
     border-color: orange;
     font-weight: bold;
     border-width: 3px;
 }
 
-/* Стандартне замовлення */
+/* Стандартні замовлення */
 .standard-delivery {
     border-color: blue;
     font-weight: bold;
     border-width: 3px;
 }
 
+/* Ефект при наведенні на картку */
 .order-card:hover {
+    transform: scale(1.05); /* Збільшує картку при наведенні */
     background-color: #f9f9f9;
+}
+
+/* Стилі для посилання, яке обгортає картку */
+.order-card-link {
+    text-decoration: none; /* Прибирає підкреслення у посилання */
+    color: inherit; /* Залишає колір тексту у спадщину від стилів картки */
 }

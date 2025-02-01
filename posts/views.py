@@ -41,3 +41,14 @@ def post_detail(request, post_id):
         'media_files': media_files,
         'object_3d_files': object_3d_files
     })
+
+
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.method == 'POST':  # Якщо POST-запит, видаляємо пост
+        post.delete()
+        return redirect('post_list')  # Редірект на список постів
+
+    # Якщо метод GET, повертаємо ту ж саму сторінку з модальним вікном
+    return redirect('post_list')  # Якщо ви хочете просто перейти на сторінку списку

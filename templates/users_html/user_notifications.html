@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Повідомлення{% endblock %}
+
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/user_notifications.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2>Ваші повідомлення</h2>
+        <div class="row">
+            {% for notification in notifications %}
+                <div class="col-md-4 mb-4">
+                    <div class="card {% if notification.is_read %}read{% else %}unread{% endif %}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ notification.title }}</h5>
+                            <p class="card-text">{{ notification.text }}</p>
+                            <p class="card-text"><small class="text-muted">{{ notification.created_at|date:"d M Y, H:i" }}</small></p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

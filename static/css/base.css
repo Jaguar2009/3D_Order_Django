@@ -58,7 +58,7 @@ header {
 }
 
 .search-input {
-    width: 750px;
+    width: 700px;
     height: 25px;
     padding: 5px;
     border: 2px solid #003366;
@@ -207,8 +207,8 @@ header {
     color: white;
     border: 2px solid #003366;
     border-radius: 50%;
-    width: 30px; /* Розмір кнопки */
-    height: 30px;
+    width: 20px; /* Розмір кнопки */
+    height: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -307,4 +307,48 @@ header {
     body {
         margin-left: 0; /* Для мобільних пристроїв */
     }
+}
+
+/* Стилі для кнопки дзвіночка */
+.bell-btn {
+    background-color: #003366;
+    color: white;
+    border: 2px solid #003366;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 0 0 2px white;
+    margin-left: 30px; /* Відстань між профілем і дзвіночком */
+    order: 7; /* Переміщаємо кнопку дзвінка після профілю */
+
+}
+
+/* Ефект наведення */
+.bell-btn:hover {
+    background-color: #005bb5; /* Світліший синій при наведенні */
+}
+
+/* Стилі для іконки дзвіночка */
+.bell-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+}
+
+/* Стилі для посилання на логотип */
+.logo-link {
+    display: inline-block; /* Логотип залишатиметься в рядку */
+    width: 100%; /* Забороняємо зміну розміру */
+    height: 100%; /* Забороняємо зміну висоти */
+}
+
+/* Стилі для логотипа */
+.logo {
+    height: 30px; /* Задаємо конкретну висоту */
+    width: auto; /* Ширина авто, щоб пропорції зберігалися */
 }

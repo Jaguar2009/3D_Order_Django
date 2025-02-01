@@ -14,7 +14,7 @@
     <div class="post-card">
         <!-- Лівий верхній кут: Аватар автора -->
         <div class="post-author">
-            <a href="{% url 'create_post' %}">
+            <a href="{% url 'user_profile' user_id=post.author.id %}">
                 <img src="{{ post.author.avatar.url }}" alt="Аватар автора" class="author-avatar">
             </a>
             <a href="{% url 'create_post' %}" class="author-name">{{ post.author.first_name }}</a> <!-- Замінив на first_name -->

@@ -29,14 +29,14 @@
             </svg>
         </a>
         <!-- Кнопка кошика -->
-        <a href="/cart" class="cart-btn">
+        <a href="{% url 'cart' %}" class="cart-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
                 <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
             </svg>
         </a>
         <!-- Кнопка профілю -->
         <div class="profile-btn">
-            <a href="{% if user.is_authenticated %}{% url 'user_profile' %}{% else %}{% url 'login' %}{% endif %}">
+            <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}">
                 {% if user.is_authenticated %}
                     <!-- Якщо користувач авторизований, показуємо аватарку -->
                     <img src="{{ user.avatar.url }}" alt="User Avatar" width="40" height="40" class="rounded-circle">
@@ -48,10 +48,21 @@
                 {% endif %}
             </a>
         </div>
+
+        <!-- Кнопка дзвіночка (повідомлення) -->
+        <a href="{% url 'user_notifications' %}" class="bell-btn" title="Повідомлення">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+                <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+            </svg>
+        </a>
+
         <!-- Логотип -->
         <div class="logo-container">
-            <img src="{% static 'logo/logo_Printify3D.png' %}" alt="Logo" class="logo">
+            <a href="{% url 'home' %}" class="logo-link">
+                <img src="{% static 'logo/logo_Printify3D.png' %}" alt="Logo" class="logo">
+            </a>
         </div>
+
         <!-- Меню Toggle -->
         <div class="menu-toggle" onclick="toggleSidebar()">
             <span class="bar"></span>
@@ -72,17 +83,37 @@
                     <span>Головна</span>
                 </a></li>
                 <li><a href="{% url 'post_list' %}" class="sidebar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-post" viewBox="0 0 16 16">
+                      <path d="M4 3.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
+                      <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/>
+                    </svg>
                     <span>Пости</span>
                 </a></li>
-                <li><a href="{% url 'cart' %}" class="sidebar-link">
-                    <span>Кошик</span>
-                </a></li>
                 <li><a href="{% url 'create_order' %}" class="sidebar-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus-fill" viewBox="0 0 16 16">
+                      <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M8.5 7v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 1 0"/>
+                    </svg>
                     <span>Створити замовлення</span>
+                </a></li>
+                <li><a href="{% url 'user_orders' %}" class="sidebar-link">
+                    <svg width="1em" height="1em" fill="none" viewBox="0 0 24 24" data-testid="SvgHistory" data-qaid="SvgHistory" focusable="false" aria-hidden="true" tabindex="-1" class="D8VyR" style="width: 24px; height: 24px;"><path fill="currentColor" fill-rule="evenodd" d="M13 5c-3.708 0-6.75 2.912-6.985 6.571l1.278-1.278a1 1 0 1 1 1.414 1.414L5 15.414l-3.707-3.707a1 1 0 1 1 1.414-1.414l1.303 1.303C4.236 6.829 8.17 3 13 3a9 9 0 1 1 0 18c-2.01 0-3.927-.91-5.435-2.114a1 1 0 0 1 1.247-1.563C10.092 18.345 11.582 19 13 19a7 7 0 1 0 0-14Zm1 4a1 1 0 1 0-2 0v3.566l2.986 1.791a1 1 0 0 0 1.029-1.714L14 11.433V9Z" clip-rule="evenodd"></path></svg>
+                    <span>Замовлення</span>
                 </a></li>
                 <li>
                     {% if user.is_authenticated and user.role == 'admin' or user.role == 'moderator' %}
-                        <a href="{% url 'admin_orders' %}">Адмін Панель</a>
+                        <a href="{% url 'admin_orders' %}" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                          <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                        </svg>
+                        <span>Замовлення</span>
+                        </a>
+
+                        <a href="{% url 'admin_materials' %}" class="sidebar-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                          <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                        </svg>
+                        <span>Матеріали</span>
+                        </a>
                     {% endif %}
                 </li>
             </ul>

@@ -1,0 +1,76 @@
+.admin-order-details-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-files-container {
+    margin-top: 20px;
+}
+
+.order-file-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.order-file-card h4 {
+    margin: 0 0 10px;
+}
+
+/* Стилі для модального вікна */
+.modal {
+    display: none; /* Приховано за замовчуванням */
+    position: fixed; /* Фіксована позиція */
+    z-index: 1; /* Вивести поверх інших елементів */
+    left: 0;
+    top: 0;
+    width: 100%; /* Ширина на весь екран */
+    height: 100%; /* Висота на весь екран */
+    overflow: auto; /* Прокручування вмісту */
+    background-color: rgb(0,0,0); /* Чорний фон */
+    background-color: rgba(0,0,0,0.4); /* Прозорий чорний */
+}
+
+/* Модальне вікно */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ширина вікна */
+}
+
+/* Кнопка закриття */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Модальне вікно підтвердження */
+.modal-content h5 {
+    margin-bottom: 20px;
+}
+
+.modal-content .form-group {
+    margin-bottom: 15px;
+}
+
+.modal-content .btn {
+    margin-top: 10px;
+}
+
