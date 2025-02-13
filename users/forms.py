@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 
@@ -54,6 +55,8 @@ class ProfileEditForm(forms.ModelForm):
 
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")
+        user = self.instance
+
         if not phone_number:
             raise ValidationError("Це поле є обов'язковим.")
 
@@ -61,7 +64,7 @@ class ProfileEditForm(forms.ModelForm):
         if len(phone_number) < 10:
             raise ValidationError("Номер телефону повинен містити щонайменше 10 цифр.")
 
-        if phone_number and User.objects.filter(phone_number=phone_number).exists():
+        if user and phone_number != user.phone_number and User.objects.filter(phone_number=phone_number).exists():
             raise ValidationError("Цей номер телефону вже зайнятий.")
 
         # Для українських номерів
@@ -177,11 +180,33 @@ class RegistrationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.password = make_password(self.cleaned_data["password"])
-        avatars_path = os.path.join(settings.MEDIA_ROOT, 'avatars_registration')
-        avatar_files = os.listdir(avatars_path)
-        random_avatar = random.choice(avatar_files)
-
-        user.avatar = f'avatars_registration/{random_avatar}'
+        user.is_active = False  # Користувач не активний до підтвердження
         if commit:
             user.save()
         return user
+
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label="Електронна пошта", widget=forms.EmailInput(attrs={"class": "input-field"}))
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        # Перевірка чи існує такий користувач
+        if not get_user_model().objects.filter(email=email).exists():
+            raise ValidationError("Такої пошти не існує.")
+        return email
+
+
+class PasswordResetCodeForm(forms.Form):
+    code = forms.CharField(label="Код підтвердження", max_length=6, widget=forms.TextInput(attrs={"class": "input-field"}))
+
+
+class PasswordResetForm(forms.Form):
+    new_password = forms.CharField(label="Новий пароль", widget=forms.PasswordInput(attrs={"class": "input-field"}))
+    confirm_password = forms.CharField(label="Підтвердження пароля", widget=forms.PasswordInput(attrs={"class": "input-field"}))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("new_password") != cleaned_data.get("confirm_password"):
+            raise forms.ValidationError("Паролі не співпадають.")
+        return cleaned_data

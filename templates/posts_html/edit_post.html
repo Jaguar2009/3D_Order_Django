@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Редагувати пост{% endblock %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/edit_post.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="edit-post-container">
+    <form id="edit-post-form" class="edit-post-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Редагувати пост</h2>
+
+        <!-- Поле для назви -->
+        <div class="form-group">
+            <input type="text" name="title" id="title" placeholder="Назва" class="post-title {% if form.title.errors %}error{% endif %}" value="{{ form.title.value }}">
+            {% if form.title.errors %}
+                <div class="error-message">
+                    {% for error in form.title.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Поле для опису -->
+        <div class="form-group">
+            <textarea name="description" id="description" placeholder="Опис" class="post-description {% if form.description.errors %}error{% endif %}">{{ form.description.value }}</textarea>
+            {% if form.description.errors %}
+                <div class="error-message">
+                    {% for error in form.description.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Поле для категорії -->
+        <div class="form-group">
+            <label for="category">Категорія</label>
+            <select name="category" id="category" class="category-select">
+                {% for value, name in form.category.field.choices %}
+                <option value="{{ value }}" {% if form.category.value == value %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+            {% if form.category.errors %}
+                <div class="error-message">
+                    {% for error in form.category.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Завантажити медіафайли -->
+        <div class="form-group">
+            <label class="upload-label">
+                Завантажити медіафайли
+                <input type="file" name="media_files" id="media-upload" accept="image/*,video/*" multiple class="custom-file-input">
+            </label>
+            <ul id="media-files-list" class="file-list">
+                {% for media in existing_media_files %}
+                    <li>
+                        <span>{{ media.file.name }}</span>
+                        <button type="button" class="remove-file">×</button>
+                        <input type="hidden" name="existing_media_files" value="{{ media.id }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Завантажити 3D об'єкти -->
+        <div class="form-group">
+            <label class="upload-label">
+                Завантажити 3D об'єкти
+                <input type="file" name="object_3d_files" id="object-upload" accept=".obj,.stl" multiple class="custom-file-input">
+            </label>
+            <ul id="object-3d-files-list" class="file-list">
+                {% for obj in existing_object_files %}
+                    <li>
+                        <span>{{ obj.file.name }}</span>
+                        <button type="button" class="remove-file">×</button>
+                        <input type="hidden" name="existing_object_files" value="{{ obj.id }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Завантажене прев'ю -->
+        <div class="form-group">
+            <label class="upload-label">
+                Завантажити прев'ю
+                <input type="file" name="preview_image" id="preview-upload" accept="image/*">
+            </label>
+            <ul id="preview-files-list" class="file-list">
+                {% if existing_preview %}
+                    <li>
+                        <span>{{ existing_preview.name }}</span>
+                        <button type="button" class="remove-file">×</button>
+                        <input type="hidden" name="existing_preview" value="{{ existing_preview.id }}">
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <button type="submit" class="publish-button">Зберегти зміни</button>
+    </form>
+</div>
+
+<script src="{% static 'js/edit_post.js' %}"></script>
+{% endblock %}

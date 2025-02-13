@@ -10,11 +10,16 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h2>Деталі замовлення</h2>
-    <p><strong>Назва замовлення:</strong> {{ order.title }}</p>
-    <p><strong>Дата оформлення:</strong> {{ order_info.created_at|date:"d M Y" }}</p>
-    <p><strong>Статус:</strong> <span id="order-status">{{ order_info.order_status }}</span></p>
-    <p><strong>Загальна сума:</strong> <span id="total-cost">{{ order_info.total_cost }}</span> грн</p>
+    <h2 class="mb-4">Деталі замовлення</h2>
+    <div class="order-info">
+        <p><strong>Назва замовлення:</strong> {{ order.title }}</p>
+        <p><strong>Дата оформлення:</strong> {{ order_info.created_at|date:"d M Y" }}</p>
+        <p><strong>Статус:</strong> <span id="order-status">{{ order_info.order_status }}</span></p>
+
+        {% if order_info.total_cost > 0 %}
+        <p><strong>Загальна вартість:</strong> <span id="total-cost">{{ order_info.total_cost }}</span> грн</p>
+        {% endif %}
+    </div>
 
     <h3 class="mt-4">Моделі у замовленні</h3>
     <div class="row">
@@ -37,7 +42,7 @@
         {% endfor %}
     </div>
 
-    {% if order_info.status == "approved" and order_info.order_status == "created" %}
+    {% if order_info.status == "approved" and order_info.order_status == "created" and order_info.total_cost > 0 %}
     <button id="pay-button" class="pay-btn">Оплатити</button>
     {% endif %}
 </div>

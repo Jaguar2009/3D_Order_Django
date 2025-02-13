@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Редагувати замовлення{% endblock %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/edit_order.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="edit-order-container">
+    <div class="order-card">
+        <form id="edit-order-form" class="edit-order-form" method="post">
+            {% csrf_token %}
+            <h2>Редагувати замовлення: {{ order.title }}</h2>
+
+            <!-- Поле для назви -->
+            <div class="form-group">
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="error-message">
+                        {% for error in form.title.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Термін доставки -->
+            <div class="form-group">
+                {{ form.delivery_time }}
+                {% if form.delivery_time.errors %}
+                    <div class="error-message">
+                        {% for error in form.delivery_time.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Поле для коментарів -->
+            <div class="form-group">
+                {{ form.comments }}
+                {% if form.comments.errors %}
+                    <div class="error-message">
+                        {% for error in form.comments.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="submit-button">Оновити замовлення</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

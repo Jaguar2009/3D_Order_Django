@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Підтвердження Email
+{% endblock %}
+
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/confirm_email.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="confirmation-container">
+    <h2>Введіть код підтвердження</h2>
+    <p>Ми надіслали вам 6-значний код на вашу електронну пошту.</p>
+
+    <form method="post" action="{% url 'confirm_email' %}" class="code-form">
+        {% csrf_token %}
+        <div class="code-inputs">
+            <input type="text" maxlength="1" class="code-input" name="code1" required autofocus>
+            <input type="text" maxlength="1" class="code-input" name="code2" required>
+            <input type="text" maxlength="1" class="code-input" name="code3" required>
+            <input type="text" maxlength="1" class="code-input" name="code4" required>
+            <input type="text" maxlength="1" class="code-input" name="code5" required>
+            <input type="text" maxlength="1" class="code-input" name="code6" required>
+        </div>
+
+        {% if error %}
+        <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        <button type="submit" class="confirm-button">Підтвердити</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputs = document.querySelectorAll(".code-input");
+
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", (e) => {
+                if (e.inputType === "insertText" && input.value.length === 1) {
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                }
+            });
+
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && input.value === "" && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

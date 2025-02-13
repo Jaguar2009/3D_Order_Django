@@ -1,0 +1,208 @@
+/* Контейнер форми */
+.edit-post-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Форма */
+.edit-post-form {
+    width: 100%;
+    max-width: 800px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+}
+
+/* Заголовок */
+.edit-post-form h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Поле Назва */
+.post-title {
+    font-size: 16px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Перелік вибраних файлів */
+.file-list {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.file-list label {
+    font-size: 16px;
+    color: #333;
+}
+
+.file-list ul {
+    padding-left: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Поля для завантаження */
+.upload-label {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.upload-label:hover {
+    background-color: #e0e0e0;
+}
+
+.upload-label input {
+    display: none;
+}
+
+/* Кнопка публікації */
+.publish-button {
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 10px 15px;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.publish-button:hover {
+    background-color: #0056b3;
+}
+
+/* Виділення полів з помилками */
+.error {
+    border-color: red;
+}
+
+/* Відображення повідомлень про помилки */
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Поле для опису */
+.post-description {
+    min-height: 100px;
+    font-size: 16px;
+    resize: vertical;
+    max-height: 300px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Поле зі списком файлів */
+.file-list li {
+    display: flex;
+    justify-content: space-between; /* Розміщує елементи по краях */
+    align-items: center; /* Вертикальне вирівнювання елементів */
+    padding: 5px 10px;
+    background: #f1f1f1;
+    margin: 5px 0;
+    border-radius: 5px;
+    width: 300px; /* Зменшуємо ширину списку файлів */
+    overflow: hidden; /* Приховуємо зайвий контент */
+}
+
+/* Поле для назви файлу */
+.file-list li span {
+    flex-grow: 1; /* Розтягує назву файлу на всю доступну ширину */
+    overflow: hidden; /* Приховує текст, що виходить за межі */
+    text-overflow: ellipsis; /* Додає многоточие, якщо текст не влазить */
+    white-space: nowrap; /* Забороняє перенос рядка */
+}
+
+/* Кнопка для видалення файлу */
+.remove-file {
+    background-color: red; /* Червоний фон */
+    color: white; /* Білий текст */
+    border: none;
+    border-radius: 50%; /* Округла форма */
+    width: 20px; /* Ширина кнопки */
+    height: 20px; /* Висота кнопки */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px; /* Розмір шрифта */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Анімація для зміни кольору */
+}
+
+/* Ефект при наведенні на кнопку */
+.remove-file:hover {
+    background-color: #cc0000; /* Темніший червоний при наведенні */
+}
+
+/* Поле зі списком файлів */
+.file-list li {
+    display: flex;
+    justify-content: space-between; /* Розміщує елементи по краях */
+    align-items: center; /* Вертикальне вирівнювання елементів */
+    padding: 5px 10px;
+    background: #f1f1f1;
+    margin: 5px 0;
+    border-radius: 5px;
+    width: 300px; /* Зменшуємо ширину списку файлів */
+    overflow: hidden; /* Приховуємо зайвий контент */
+}
+
+/* Поле для назви файлу */
+.file-list li span {
+    flex-grow: 1; /* Розтягує назву файлу на всю доступну ширину */
+    overflow: hidden; /* Приховує текст, що виходить за межі */
+    text-overflow: ellipsis; /* Додає многоточие, якщо текст не влазить */
+    white-space: nowrap; /* Забороняє перенос рядка */
+}
+
+/* Кнопка для видалення файлу */
+.remove-file {
+    background-color: red; /* Червоний фон */
+    color: white; /* Білий текст */
+    border: none;
+    border-radius: 50%; /* Округла форма */
+    width: 20px; /* Ширина кнопки */
+    height: 20px; /* Висота кнопки */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px; /* Розмір шрифта */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Анімація для зміни кольору */
+}
+
+/* Ефект при наведенні на кнопку */
+.remove-file:hover {
+    background-color: #cc0000; /* Темніший червоний при наведенні */
+}
+

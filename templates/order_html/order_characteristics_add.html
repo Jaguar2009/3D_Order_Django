@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h2>Характеристики файлу: {{ file_name }}</h2>
+<p>Файл {{ file_index|add:1 }} з {{ total_files }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Зберегти та продовжити</button>
+</form>
+{% endblock %}

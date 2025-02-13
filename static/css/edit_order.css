@@ -1,0 +1,76 @@
+/* Загальні стилі для контейнера */
+.edit-order-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.order-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+.edit-order-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-order-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 96%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.error-message p {
+    color: red;
+    font-size: 14px;
+}
+
+.submit-button {
+    background-color: #1E3A8A; /* Темно-синій колір */
+    color: white;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+.submit-button:hover {
+    background-color: #1e2a47; /* Темніший відтінок синього при наведенні */
+}
+
+/* Стилі для поля коментарів */
+.form-group textarea {
+    width: 96%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    resize: vertical; /* Дозволяє змінювати розмір тільки вертикально */
+    max-height: 300px; /* Максимальна висота */
+    overflow: auto; /* Додає прокрутку, якщо вміст перевищує максимальну висоту */
+}

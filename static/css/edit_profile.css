@@ -1,0 +1,87 @@
+
+
+/* Стилі для контейнера форми редагування профілю */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Стилі для заголовка */
+h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #003366; /* Додаємо колір для контрасту */
+}
+
+/* Стилі для форми */
+form {
+  margin-top: 30px;
+}
+
+/* Стилі для групи форми */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Стилі для мітки */
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+  color: #003366; /* Додаємо контрастний колір */
+}
+
+
+
+/* Фокус на полях вводу */
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus {
+  border-color: #003366; /* Змінюємо колір рамки на темно-синій */
+  outline: none;
+}
+
+/* Стилі для помилок */
+.error-messages {
+  color: red;
+  font-size: 12px;
+}
+
+/* Стилі для кнопок форми */
+.form-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Стилі для кнопок */
+button,
+a.btn {
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  background-color: #003366;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover,
+a.btn:hover {
+  background-color: #005bb5; /* Світліший синій при наведенні */
+}
+
+a.btn-secondary {
+  background-color: #ccc;
+  color: white;
+  margin-left: 10px;
+}
+
+a.btn-secondary:hover {
+  background-color: #999;
+}

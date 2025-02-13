@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Деталі замовлення{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/order_details_cart.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="order-details-container">
+    <h2 class="order-title">Деталі замовлення: {{ order.title }}</h2>
+    <p><strong>Коментар:</strong> {{ order.comments }}</p>
+    <p><strong>Тип доставки:</strong> {{ order.delivery_time }}</p>
+
+    <h3>Файли замовлення:</h3>
+    <ul class="order-files-list">
+        {% for file in order.files.all %}
+        <li class="file-item">
+            <strong>{{ file.file_name }}</strong>
+            <p><strong>Матеріал:</strong> {{ file.characteristics.material }}</p>
+            <p><strong>Розмір:</strong> {{ file.characteristics.size }} %</p>
+            <p><strong>Роздільна здатність:</strong> {{ file.characteristics.resolution }}</p>
+            <p><strong>Підтримки:</strong> {{ file.characteristics.support_structure }}</p>
+            <p><strong>Постобробка:</strong> {{ file.characteristics.post_processing }}</p>
+            <p><strong>Копії:</strong> {{ file.characteristics.copies }}</p>
+            <p><strong>Заповнення:</strong> {{ file.characteristics.filling }}%</p>
+            <a href="{{ file.file.url }}" download class="download-button">Завантажити файл</a>
+            <!-- Посилання на сторінку редагування файлу -->
+            <a href="{% url 'edit_order_file' order.id file.id %}" class="edit-button">Редагувати файл</a>
+            <button class="delete-file-button" data-file-id="{{ file.id }}" data-order-id="{{ order.id }}">
+                Видалити
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'upload_order_files' order.id %}">
+        <button>Додати файли</button>
+    </a>
+
+
+
+    <div class="order-actions">
+        <button class="back-button" onclick="window.history.back();">Повернутися до кошика</button>
+        <a href="{% url 'edit_order' order.id %}" class="edit-order-button">Редагувати замовлення</a>
+        <button type="button" class="delete-order-button" id="delete-order-btn">Видалити замовлення</button>
+    </div>
+
+    <!-- Модальне вікно для підтвердження видалення -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Ви впевнені, що хочете видалити замовлення?</h3>
+            <form id="delete-form" method="POST" action="{% url 'delete_order' order.id %}">
+                {% csrf_token %}
+                <button type="submit" class="confirm-button">Підтвердити</button>
+            </form>
+            <button id="cancelDelete" class="cancel-button">Скасувати</button>
+        </div>
+    </div>
+
+    {% for file in order.files.all %}
+        <!-- Модальне вікно для видалення файлу та характеристик -->
+        <div id="deleteModalFile" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Видалити файл та характеристики</h2>
+                <p>Ви впевнені, що хочете видалити цей файл і його характеристики?</p>
+                <form id="delete-form-file" method="POST" action="{% url 'delete_order_file' order.id file.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="confirm-button">Підтвердити</button>
+                    <button type="button" class="cancel-button">Скасувати</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+<script src="{% static 'js/order_details_cart.js' %}"></script>
+{% endblock %}

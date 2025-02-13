@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Деталі замовлення{% endblock %}
-
+{% block title %}Ваші замовлення{% endblock %}
 {% load static %}
 
 {% block styles %}
@@ -9,24 +8,29 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h2>Ваші замовлення</h2>
-        <div class="row">
-            {% for order in orders %}
-                <div class="col-md-4 mb-4">
-                    <a href="{% url 'order-details' order.id %}" class="text-decoration-none">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ order.order.title }}</h5>
-                                <p class="card-text">Дата купівлі: {{ order.created_at|date:"d M Y" }}</p>
-                                <p class="card-text">Кількість моделей: {{ order.quantity }}</p>
-                                <p class="card-text">Статус замовлення: <strong>{{ order.get_order_status_display }}</strong></p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
+<div class="user-orders-container">
+    <h2>Ваші замовлення</h2>
+    <div class="order-cards-container">
+        {% for order in orders %}
+        <a href="{% url 'order-details' order.id %}" class="order-card-link">
+            <div class="order-card
+                {% if order.order.delivery_time == 'Urgent' %}
+                    urgent-delivery
+                {% elif order.order.delivery_time == 'By Agreement' %}
+                    by-agreement-delivery
+                {% else %}
+                    standard-delivery
+                {% endif %}">
+                <h3>{{ order.order.title }}</h3>
+                <p><strong>Дата купівлі:</strong> {{ order.created_at|date:"d/m/Y" }}</p>
+                <p><strong>Терміновість:</strong> {{ order.order.get_delivery_time_display }}</p>
+                <p><strong>Кількість моделей:</strong> {{ order.quantity }}</p>
+                <p><strong>Статус замовлення:</strong> <span class="order-status">{{ order.get_order_status_display }}</span></p>
+            </div>
+        </a>
+        {% empty %}
+        <p>У вас ще немає замовлень.</p>
+        {% endfor %}
     </div>
+</div>
 {% endblock %}
-

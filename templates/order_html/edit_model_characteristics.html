@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Редагувати характеристики{% endblock %}
+
+{% block body %}
+<div class="edit-characteristics-container">
+    <h2>Редагувати характеристики для файлу: {{ order_file.file_name }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="submit-button">Зберегти характеристики</button>
+    </form>
+</div>
+{% endblock %}

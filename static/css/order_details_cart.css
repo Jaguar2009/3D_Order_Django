@@ -1,0 +1,153 @@
+/* Контейнер для деталей замовлення */
+.order-details-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Заголовок замовлення */
+.order-title {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Список характеристик замовлення */
+.order-characteristics-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-characteristics-list li {
+    margin-bottom: 10px;
+}
+
+/* Список файлів замовлення */
+.order-files-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.file-item {
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.file-item p {
+    margin: 5px 0;
+}
+
+/* Кнопка назад */
+.order-actions {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.back-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}
+
+/* Кнопка редагування */
+.edit-button {
+    padding: 8px 16px;
+    background-color: #ffc107;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.edit-button:hover {
+    background-color: #e0a800;
+}
+
+
+/* Кнопка редагування замовлення */
+.edit-order-button {
+    padding: 8px 16px;
+    background-color: #ffc107;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    margin-top: 10px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.edit-order-button:hover {
+    background-color: #e0a800;
+}
+
+
+/* Стилі для модального вікна */
+.modal {
+    display: none; /* Спочатку модальне вікно приховане */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Напівпрозорий фон */
+    z-index: 1000; /* Задаємо високий індекс для модального вікна */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+    max-width: 100%;
+}
+
+button {
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    margin: 10px;
+}
+
+button.cancel-button {
+    background-color: #f44336; /* Червона кнопка для скасування */
+}
+
+button.confirm-button {
+    background-color: #4CAF50; /* Зелена кнопка для підтвердження */
+}
+
+button.delete-order-button {
+    background-color: #f44336; /* Червона кнопка для видалення замовлення */
+    color: white;
+}

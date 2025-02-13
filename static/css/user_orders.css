@@ -1,20 +1,79 @@
-.card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+/* Основний контейнер */
+.user-orders-container {
+    padding: 20px;
 }
 
-.card-title {
+/* Контейнер карток */
+.order-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: stretch;
+    margin-bottom: 20px;
+}
+
+/* Загальний стиль картки */
+.order-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 2px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    transition: transform 0.3s ease, border 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    min-height: 250px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+/* Стиль заголовків */
+.order-card h3 {
+    margin-top: 0;
     font-size: 1.25rem;
+}
+
+/* Стиль для деталей */
+.order-card p {
+    margin: 5px 0;
+}
+
+/* Термінові замовлення */
+.urgent-delivery {
+    border-color: red;
+    font-weight: bold;
+    border-width: 3px;
+}
+
+/* Замовлення за попереднім погодженням */
+.by-agreement-delivery {
+    border-color: orange;
+    font-weight: bold;
+    border-width: 3px;
+}
+
+/* Стандартні замовлення */
+.standard-delivery {
+    border-color: blue;
+    font-weight: bold;
+    border-width: 3px;
+}
+
+/* Ефект наведення */
+.order-card:hover {
+    transform: scale(1.05);
+    background-color: #f9f9f9;
+}
+
+/* Стиль для статусу */
+.order-status {
     font-weight: bold;
 }
 
-.card-text {
-    font-size: 1rem;
-    color: #555;
-}
-
-.btn {
-    margin-top: 10px;
+/* Посилання */
+.order-card-link {
+    text-decoration: none;
+    color: inherit;
 }

@@ -1,0 +1,74 @@
+/* Центрування картки */
+.edit-file-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+.card h2 {
+    margin-bottom: 20px;
+}
+
+.current-file {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.file-upload-container {
+    margin-bottom: 30px;
+}
+
+.file-input {
+    display: none;
+}
+
+.upload-button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}
+
+.upload-button:hover {
+    background-color: #333;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.save-button,
+.cancel-button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    width: 45%;
+}
+
+.save-button:hover,
+.cancel-button:hover {
+    background-color: #333;
+}

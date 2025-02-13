@@ -1,50 +1,65 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    Профіль користувача
+{% block title %}Профіль користувача{% endblock %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user_profile.css' %}">
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Профіль користувача</h1>
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Профіль користувача</h1>
+    </div>
 
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card rounded">
-                    <div class="card-header text-center">
-                        <img src="{{ user.avatar.url }}" alt="{{ user.first_name }}" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
-                    </div>
-                    <div class="card-body">
-                        <dl class="row">
-                            <dt class="col-sm-3">Логін:</dt>
-                            <dd class="col-sm-9">{{ user.email }}</dd>
+    <div class="profile-details">
+        <div class="profile-avatar">
+            {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" alt="Avatar" class="avatar-img">
+            {% else %}
+                <img src="{% static 'images/default-avatar.png' %}" alt="Avatar" class="avatar-img">
+            {% endif %}
+        </div>
 
-                            <dt class="col-sm-3">Ім'я:</dt>
-                            <dd class="col-sm-9">{{ user.first_name }}</dd>
-
-                            <dt class="col-sm-3">Прізвище:</dt>
-                            <dd class="col-sm-9">{{ user.last_name }}</dd>
-
-                            <dt class="col-sm-3">Дата реєстрації:</dt>
-                            <dd class="col-sm-9">{{ user.date_joined|date:"d.m.Y H:i" }}</dd>
-
-                            <dt class="col-sm-3">Кількість друзів:</dt>
-                            <dd class="col-sm-9">{{ user.friends.count }}</dd>
-
-                            <dt class="col-sm-3">Тип користувача:</dt>
-                            <dd class="col-sm-9">
-                                {% if user.is_superuser %}
-                                    Адміністратор
-                                {% elif user.is_staff %}
-                                    Співробітник
-                                {% else %}
-                                    Користувач
-                                {% endif %}
-                            </dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
+        <div class="profile-info">
+            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+            <p>Дата реєстрації: {{ user.date_joined|date:"d.m.Y" }}</p>
         </div>
     </div>
+
+    <!-- Додаємо секцію з постами -->
+    <div class="user-posts">
+        <h3>Ваші пости</h3>
+        <div class="post-list">
+            {% for post in posts %}
+            <div class="post-card">
+                <div class="post-author">
+                    <a href="{% url 'user_profile' user_id=post.author.id %}">
+                        <img src="{{ post.author.avatar.url }}" alt="Аватар автора" class="author-avatar">
+                    </a>
+                    <a href="{% url 'create_post' %}" class="author-name">{{ post.author.first_name }}</a>
+                </div>
+
+                <div class="post-image">
+                    {% if post.preview_image %}
+                    <a href="{% url 'post_detail' post.id %}">
+                        <img src="{{ post.preview_image.url }}" alt="Прев'ю" class="preview-img">
+                    </a>
+                    {% endif %}
+                </div>
+
+                <div class="card-title">{{ post.title }}</div>
+
+                <div class="post-share">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                        <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+                    </svg>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
 {% endblock %}

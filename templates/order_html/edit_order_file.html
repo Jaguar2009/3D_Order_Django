@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Редагувати файл{% endblock %}
+
+{% block body %}
+<div class="edit-order-container">
+    <h2>Редагувати файл для замовлення: {{ order_file.order.title }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="submit-button">Зберегти файл</button>
+    </form>
+</div>
+{% endblock %}
