@@ -18,7 +18,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'description', 'preview_image', 'media_files', 'object_3d_files']
+        fields = ['title', 'description', 'preview_image', 'media_files', 'object_3d_files', "category"]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Назва поста'}),
             'preview_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
@@ -120,7 +120,7 @@ class EditPostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'description', 'preview_image', 'media_files', 'object_3d_files']
+        fields = ['title', 'description', 'preview_image', 'media_files', 'object_3d_files', "category"]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Назва поста'}),
             'preview_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),

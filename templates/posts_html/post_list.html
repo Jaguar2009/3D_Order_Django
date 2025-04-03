@@ -9,6 +9,30 @@
 
 {% block body %}
 <h1>Список постів</h1>
+
+<!-- Форма для вибору фільтру -->
+<form method="get" action="{% url 'post_list' %}">
+    <div class="filter-container">
+        <!-- Фільтри для сортування -->
+        <select name="sort" id="sort" onchange="this.form.submit()">
+            <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>Новизною</option>
+            <option value="popularity" {% if sort_by == 'popularity' %}selected{% endif %}>Популярністю (куби)</option>
+        </select>
+
+        <!-- Фільтрація за категорією -->
+        <select name="category" id="category" onchange="this.form.submit()">
+            <option value="">Всі категорії</option>
+            <option value="home" {% if category_filter == 'home' %}selected{% endif %}>Для дому</option>
+            <option value="hobby" {% if category_filter == 'hobby' %}selected{% endif %}>Хобі та творчість</option>
+            <option value="kids" {% if category_filter == 'kids' %}selected{% endif %}>Для дітей</option>
+            <option value="gadgets" {% if category_filter == 'gadgets' %}selected{% endif %}>Гаджети та аксесуари</option>
+            <option value="tools" {% if category_filter == 'tools' %}selected{% endif %}>Інструменти та функціональні речі</option>
+            <option value="printers" {% if category_filter == 'printers' %}selected{% endif %}>Для 3D-принтерів</option>
+            <option value="other" {% if category_filter == 'other' %}selected{% endif %}>Інше</option>
+        </select>
+    </div>
+</form>
+
 <div class="post-list">
     {% for post in posts %}
     <div class="post-card">
@@ -17,13 +41,13 @@
             <a href="{% url 'user_profile' user_id=post.author.id %}">
                 <img src="{{ post.author.avatar.url }}" alt="Аватар автора" class="author-avatar">
             </a>
-            <a href="{% url 'user_profile' user_id=post.author.id %}" class="author-name">{{ post.author.first_name }}</a> <!-- Замінив на first_name -->
+            <a href="{% url 'user_profile' user_id=post.author.id %}" class="author-name">{{ post.author.first_name }}</a>
         </div>
 
         <!-- Основна частина картки: Прев'ю з назвою -->
         <div class="post-image">
             {% if post.preview_image %}
-            <a href="{% url 'post_detail' post.id %}"> <!-- Додаємо посилання на деталі поста -->
+            <a href="{% url 'post_detail' post.id %}">
                 <img src="{{ post.preview_image.url }}" alt="Прев'ю" class="preview-img">
             </a>
             {% endif %}
@@ -31,10 +55,10 @@
 
         <div class="card-title">{{ post.title }}</div>
 
-        <!-- Права верхня частина: Іконка для копіювання посилання -->
+        <!-- Права верхня частина: Іконка поширення -->
         <div class="post-share">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
-                <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3"/>
+                <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
             </svg>
         </div>
     </div>

@@ -7,6 +7,7 @@ import os
 import random
 from django.conf import settings
 from users.models import User
+from django.utils import timezone
 
 
 class CustomUserLoginForm(forms.Form):
@@ -210,3 +211,16 @@ class PasswordResetForm(forms.Form):
         if cleaned_data.get("new_password") != cleaned_data.get("confirm_password"):
             raise forms.ValidationError("Паролі не співпадають.")
         return cleaned_data
+
+
+class BanUserForm(forms.Form):
+    banned_until = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        initial=timezone.now,
+        label="Дата закінчення бану"
+    )
+    reason = forms.CharField(
+        widget=forms.Textarea(attrs={'placeholder': 'Введіть причину бану'}),
+        max_length=500,
+        label="Причина бану"
+    )

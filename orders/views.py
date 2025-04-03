@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Sum
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import modelform_factory
 from django.views.decorators.csrf import csrf_exempt
@@ -11,7 +11,17 @@ from .models import Order, OrderFile, ModelCharacteristics, Cart, OrderInfo, Ser
 from stl import mesh
 import numpy as np
 import json
+from rapidfuzz import process
 
+def check_order_permissions(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    if order.user != request.user and not request.user.is_staff and request.user.role != 'admin':
+        return HttpResponseForbidden("У вас немає прав для цього замовлення.")
+
+    return None  # Все в порядку
+
+@login_required(login_url='/users/login/')
 def create_order(request):
     if request.method == 'POST':
         form = OrderForm(request.POST, request.FILES)
@@ -32,14 +42,14 @@ def create_order(request):
 
     return render(request, 'order_html/create_order.html', {'form': form})
 
-
+@login_required(login_url='/users/login/')
 def edit_order(request, order_id):
     # Отримуємо замовлення за ID
     order = get_object_or_404(Order, pk=order_id)
 
-    # Перевіряємо, чи є у користувача доступ до редагування цього замовлення
-    if order.user != request.user:
-        return redirect('orders:list')  # Перенаправляємо, якщо замовлення не належить користувачу
+    permission_check = check_order_permissions(request, order_id)
+    if permission_check:
+        return permission_check  # Якщо немає прав, повертаємо відповідь Forbidden
 
     # Створюємо форму для редагування замовлення
     if request.method == 'POST':
@@ -52,7 +62,7 @@ def edit_order(request, order_id):
 
     return render(request, 'order_html/edit_order.html', {'form': form, 'order': order})
 
-
+@login_required(login_url='/users/login/')
 def order_characteristics(request, order_id, file_index):
     order = Order.objects.get(id=order_id, user=request.user)
     files = order.files.all()
@@ -87,9 +97,13 @@ def order_characteristics(request, order_id, file_index):
         'order_id': order.id,
     })
 
-
+@login_required(login_url='/users/login/')
 def edit_order_file(request, order_id, file_id):
     order_file = get_object_or_404(OrderFile, id=file_id, order_id=order_id)
+
+    permission_check = check_order_permissions(request, order_id)
+    if permission_check:
+        return permission_check  # Якщо немає прав, повертаємо відповідь Forbidden
 
     if request.method == 'POST':
         form = OrderFileEditForm(request.POST, request.FILES, instance=order_file)
@@ -105,10 +119,14 @@ def edit_order_file(request, order_id, file_id):
     return render(request, 'order_html/edit_order_file.html', {'form': form, 'order_file': order_file})
 
 
-# Вью для редагування характеристик
+@login_required(login_url='/users/login/')
 def edit_model_characteristics(request, order_id, file_id):
     order_file = get_object_or_404(OrderFile, id=file_id, order_id=order_id)
     characteristics = get_object_or_404(ModelCharacteristics, order_file=order_file)
+
+    permission_check = check_order_permissions(request, order_id)
+    if permission_check:
+        return permission_check  # Якщо немає прав, повертаємо відповідь Forbidden
 
     if request.method == 'POST':
         form = ModelCharacteristicsEditForm(request.POST, instance=characteristics)
@@ -120,10 +138,14 @@ def edit_model_characteristics(request, order_id, file_id):
 
     return render(request, 'order_html/edit_model_characteristics.html', {'form': form, 'order_file': order_file})
 
-
+@login_required(login_url='/users/login/')
 def delete_order(request, order_id):
     # Перевірка чи користувач має право видаляти замовлення
     order = get_object_or_404(Order, id=order_id)
+
+    permission_check = check_order_permissions(request, order_id)
+    if permission_check:
+        return permission_check  # Якщо немає прав, повертаємо відповідь Forbidden
 
     # Видалення замовлення
     order.delete()
@@ -131,10 +153,14 @@ def delete_order(request, order_id):
     # Перенаправлення на сторінку кошика
     return redirect('cart')  # 'cart' - це URL для сторінки кошика
 
-
+@login_required(login_url='/users/login/')
 def delete_order_file(request, order_id, file_id):
     order = get_object_or_404(Order, id=order_id)
     order_file = get_object_or_404(OrderFile, id=file_id, order_id=order_id)
+
+    permission_check = check_order_permissions(request, order_id)
+    if permission_check:
+        return permission_check  # Якщо немає прав, повертаємо відповідь Forbidden
 
     # Видаляємо характеристики, якщо вони існують
     if order_file.characteristics:
@@ -146,9 +172,13 @@ def delete_order_file(request, order_id, file_id):
     # Переадресовуємо на сторінку кошика або іншу необхідну
     return redirect('order_details_cart', order_id=order.id)
 
-
+@login_required(login_url='/users/login/')
 def upload_order_files(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    permission_check = check_order_permissions(request, order_id)
+    if permission_check:
+        return permission_check  # Якщо немає прав, повертаємо відповідь Forbidden
 
     if request.method == 'POST':
         files = request.FILES.getlist('files')
@@ -166,9 +196,12 @@ def upload_order_files(request, order_id):
 
     return render(request, 'order_html/upload_order_files.html', {'order': order})
 
-
+@login_required(login_url='/users/login/')
 def order_characteristics_add(request, order_id, file_index):
     order = get_object_or_404(Order, id=order_id, user=request.user)
+    permission_check = check_order_permissions(request, order_id)
+    if permission_check:
+        return permission_check  # Якщо немає прав, повертаємо відповідь Forbidden
 
     # Отримуємо нові файли з сесії
     new_file_ids = request.session.get('new_file_ids', [])
@@ -209,7 +242,7 @@ def order_characteristics_add(request, order_id, file_index):
     })
 
 
-@login_required
+@login_required(login_url='/users/login/')
 def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
 
@@ -249,32 +282,43 @@ def view_cart(request):
     return render(request, 'order_html/cart.html', {'cart_items': cart_items})
 
 
-@login_required
+@login_required(login_url='/users/login/')
 def order_details_cart(request, order_id):
+    permission_check = check_order_permissions(request, order_id)
+    if permission_check:
+        return permission_check  # Якщо немає прав, повертаємо відповідь Forbidden
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, 'order_html/order_details_cart.html', {'order': order})
 
 
+@login_required(login_url='/users/login/')
 def user_orders(request):
-    # Отримуємо всі замовлення користувача
+    query = request.GET.get('q', '').lower().strip()
     orders = (
         OrderInfo.objects
         .select_related('order')
         .filter(user=request.user)
-        .annotate(
-            total_copies=Sum('order__files__characteristics__copies'),
-        )
+        .annotate(total_copies=Sum('order__files__characteristics__copies'))
         .order_by('-created_at')
     )
 
-    context = {
-        'orders': orders
-    }
+    if query:
+        # Отримуємо список назв замовлень
+        order_titles = list(orders.values_list("order__title", flat=True))
 
-    return render(request, 'order_html/user_orders.html', context)
+        # Використовуємо fuzzy search для знаходження схожих назв
+        matches = process.extract(query, order_titles, limit=10)
+
+        # Витягуємо тільки ті заголовки, що мають схожість >= 50%
+        similar_titles = [match[0] for match in matches if match[1] >= 50]
+
+        # Фільтруємо замовлення, які мають схожі назви
+        orders = orders.filter(order__title__in=similar_titles)
+
+    return render(request, 'order_html/user_orders.html', {'orders': orders, 'query': query})
 
 
-
+@login_required(login_url='/users/login/')
 def order_details(request, order_id):
     order_info = get_object_or_404(OrderInfo, id=order_id)
     order = order_info.order  # Отримуємо об'єкт замовлення
@@ -286,7 +330,7 @@ def order_details(request, order_id):
     return render(request, 'order_html/order_details.html', context)
 
 
-@csrf_exempt
+@login_required(login_url='/users/login/')
 def pay_order(request, order_id):
     if request.method == "POST":
         order_info = get_object_or_404(OrderInfo, id=order_id)
@@ -306,3 +350,23 @@ def pay_order(request, order_id):
         return JsonResponse({"success": True})
 
     return JsonResponse({"success": False, "error": "Неправильний метод запиту."})
+
+
+@login_required(login_url='/users/login/')
+def repeat_order(request, order_id):
+    # Отримуємо замовлення
+    order_info = get_object_or_404(OrderInfo, id=order_id, user=request.user)
+
+    # Перевіряємо, чи замовлення має статус "Розглядається"
+    if order_info.status == 'pending':
+        return redirect('user_orders')
+
+    # Оновлюємо статус замовлення
+    order_info.status = 'pending'  # "Розглядається"
+    order_info.order_status = 'created'  # "Оформлено"
+    order_info.total_cost = 0  # Встановлюємо вартість на 0
+
+    # Зберігаємо зміни
+    order_info.save()
+
+    return redirect('user_orders')  # Перенаправляємо на список замовлень користувача

@@ -16,4 +16,7 @@ urlpatterns = [
     path("password-reset/code/", views.verify_reset_code, name="password_reset_code"),
     path("password-reset/new/", views.reset_password, name="password_reset_form"),
 
+    path('ban_user/<int:user_id>/', views.ban_user, name='ban_user'),
+    path('unban_user/<int:user_id>/', views.unban_user, name='unban_user'),
+
     ]

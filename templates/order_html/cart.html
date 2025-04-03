@@ -21,7 +21,6 @@
                         {{ cart_item.order.title }}
                     </a>
                 </h3>
-                <p>Дата створення: {{ cart_item.order.created_at|date:"d/m/Y" }}</p>
                 <p><strong>Коментар:</strong> {{ cart_item.order.comments }}</p>
             </div>
 
@@ -31,9 +30,8 @@
                 <div class="file-card">
                     <p><strong>Назва файлу:</strong> {{ order_file.file_name }}</p>
                     <div class="file-characteristics">
-                        <p><strong>Матеріал:</strong> {{ order_file.characteristics.material_type }}</p>
-                        <p><strong>Колір:</strong> {{ order_file.characteristics.material_color }}</p>
-                        <p><strong>Розмір:</strong> {{ order_file.characteristics.size }} мм</p>
+                        <p><strong>Матеріал:</strong> {{ order_file.characteristics.material }}</p>
+                        <p><strong>Розмір:</strong> {{ order_file.characteristics.size }} %</p>
                         <p><strong>Копії:</strong> {{ order_file.characteristics.copies }}</p>
                     </div>
                 </div>

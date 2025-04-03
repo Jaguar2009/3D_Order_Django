@@ -16,15 +16,15 @@
     <div class="profile-details">
         <div class="profile-avatar">
             {% if user.avatar %}
-                <img src="{{ user.avatar.url }}" alt="Avatar" class="avatar-img">
+                <img src="{{ profile_user.avatar.url }}" alt="Avatar" class="avatar-img">
             {% else %}
                 <img src="{% static 'images/default-avatar.png' %}" alt="Avatar" class="avatar-img">
             {% endif %}
         </div>
 
         <div class="profile-info">
-            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-            <p>Дата реєстрації: {{ user.date_joined|date:"d.m.Y" }}</p>
+            <h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+            <p>Дата реєстрації: {{ profile_user.date_joined|date:"d.m.Y" }}</p>
         </div>
     </div>
 

@@ -36,6 +36,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     country = models.CharField(max_length=50)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
     date_joined = models.DateTimeField(default=timezone.now)
+    is_sanctuary_enabled = models.BooleanField(default=False, verbose_name="Фільтр коментарів (Убежище)")
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -67,3 +69,13 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Повідомлення для {self.user.first_name}: {self.title}"
+
+
+class UserBan(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bans")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Час створення бану")
+    banned_until = models.DateTimeField(verbose_name="Час закінчення бану")
+    reason = models.TextField(verbose_name="Причина бану", blank=True, null=True)
+
+    def __str__(self):
+        return f"Бан для {self.user.email} до {self.banned_until}"

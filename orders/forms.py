@@ -79,11 +79,16 @@ class ModelCharacteristicsForm(forms.ModelForm):
     size = forms.FloatField(required=False)
     copies = forms.FloatField(required=False)
     filling = forms.FloatField(required=False)
-    color = forms.CharField(max_length=20, required=False, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = ModelCharacteristics
-        fields = ['material', 'size', 'resolution', 'support_structure', 'post_processing',
-                  'copies', 'filling']
+        fields = ['material', 'size', 'resolution', 'support_structure', 'post_processing', 'copies', 'filling']
+
+    def clean_material(self):
+        material = self.cleaned_data.get('material')
+        if not material:
+            raise forms.ValidationError("Матеріал є обов'язковим полем.")
+        return material
 
     def clean_size(self):
         size = self.cleaned_data.get('size')
@@ -114,6 +119,7 @@ class ModelCharacteristicsForm(forms.ModelForm):
         if filling > 100:
             raise forms.ValidationError("Максимальне значення заповнення — 100.")
         return filling
+
 
 
 class OrderFileEditForm(forms.ModelForm):

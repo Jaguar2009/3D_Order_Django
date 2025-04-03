@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Деталі користувача {{ profile_user.first_name }}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/admin_user_detail.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Деталі користувача</h1>
+    <div class="profile-header">
+        <img src="{{ profile_user.avatar.url }}" alt="Аватар" class="user-avatar">
+        <div class="user-info">
+            <h2>{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+            <p><strong>Email:</strong> {{ profile_user.email }}</p>
+            <p><strong>Телефон:</strong> {{ profile_user.phone_number|default:"Немає" }}</p>
+            <p><strong>Країна:</strong> {{ profile_user.country }}</p>
+            <p><strong>Роль:</strong> {{ profile_user.get_role_display }}</p>
+            <p><strong>Дата реєстрації:</strong> {{ profile_user.date_joined }}</p>
+            <p><strong>Статус:</strong> {% if profile_user.is_active %} Активний {% else %} Заблокований {% endif %}</p>
+        </div>
+    </div>
+
+    <h3>Повідомлення</h3>
+    <ul>
+        {% for notification in notifications %}
+        <li>{{ notification.title }} - {{ notification.created_at }}</li>
+        {% empty %}
+        <p>Немає повідомлень</p>
+        {% endfor %}
+    </ul>
+
+    <h3>Коментарі</h3>
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <a href="{% url 'post_detail' comment.post.id %}" class="post-link">
+                {{ comment.content }} ({{ comment.created_at }})
+            </a>
+        </li>
+        {% empty %}
+        <p>Немає коментарів</p>
+        {% endfor %}
+    </ul>
+
+    <h3>Публікації</h3>
+    <ul>
+        {% for post in posts %}
+        <li>
+            <a href="{% url 'post_detail' post.id %}" class="post-link">
+                {{ post.title }} ({{ post.created_at }})
+            </a>
+        </li>
+        {% empty %}
+        <p>Немає публікацій</p>
+        {% endfor %}
+    </ul>
+
+    <h3>Замовлення</h3>
+    <ul>
+        {% for order in orders %}
+        <li>{{ order.title }} - {{ order.delivery_time }}</li>
+        {% empty %}
+        <p>Немає замовлень</p>
+        {% endfor %}
+    </ul>
+
+    <h3>Кошик</h3>
+    <ul>
+        {% for cart_item in cart_items %}
+        <li>{{ cart_item.order.title }} - Кількість: {{ cart_item.quantity }}</li>
+        {% empty %}
+        <p>Кошик порожній</p>
+        {% endfor %}
+    </ul>
+
+    <h3>Інформація про замовлення</h3>
+    <ul>
+        {% for order_info in order_infos %}
+        <li>Замовлення: {{ order_info.order.title }} - Статус: {{ order_info.get_status_display }} - {{ order_info.total_cost }} грн</li>
+        {% empty %}
+        <p>Немає інформації про замовлення</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

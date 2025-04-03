@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Список адмінів{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/admin_list.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Список адмінів</h1>
+
+    {% if request.user.is_superuser %}
+        <!-- Форма для додавання модератора -->
+        <form method="post" class="moderator-form">
+            {% csrf_token %}
+            <label for="email">Введіть Email раба Божого:</label>
+            {{ form.email }}
+            <button type="submit">Дати благословення</button>
+        </form>
+
+        <!-- Відображення помилок форми -->
+        {% if form.errors %}
+            <div class="error-messages">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <p class="error">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
+
+
+    <div class="user-list">
+        {% for user in admins %}
+        <div class="user-card">
+            <a href="{% url 'user_profile' user.id %}">
+                <img src="{{ user.avatar.url }}" alt="Аватар" class="user-avatar">
+            </a>
+            <div class="user-info">
+                <a {# href="{% url 'admin_user_detail' user.id %}" class="user-name" #}>{{ user.first_name }} {{ user.last_name }} - Я ТУТ ВЛАДА</a>
+                <p class="user-email">{{ user.email }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>Адмінів не знайдено.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

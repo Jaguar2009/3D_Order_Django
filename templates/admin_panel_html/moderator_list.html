@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Список модераторів{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/user_list.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Список модераторів</h1>
+    <div class="user-list">
+        {% for user in moderators %}
+        <div class="user-card">
+            <a href="{% url 'user_profile' user.id %}">
+                <img src="{{ user.avatar.url }}" alt="Аватар" class="user-avatar">
+            </a>
+            <div class="user-info">
+                <a href="{% url 'admin_moderator_detail' user.id %}" class="user-name">{{ user.first_name }} {{ user.last_name }}</a>
+                <p class="user-email">{{ user.email }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>Модераторів не знайдено.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

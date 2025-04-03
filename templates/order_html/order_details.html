@@ -15,6 +15,18 @@
         <p><strong>Назва замовлення:</strong> {{ order.title }}</p>
         <p><strong>Дата оформлення:</strong> {{ order_info.created_at|date:"d M Y" }}</p>
         <p><strong>Статус:</strong> <span id="order-status">{{ order_info.order_status }}</span></p>
+        <p><strong>Статус розгляду:</strong>
+            <span class="status-label status-{{ order_info.status }}">{{ order_info.get_status_display }}</span>
+        </p>
+
+        <!-- Відображення причини відмови -->
+        {% if order_info.status == "rejected" and order_info.rejection %}
+        <div class="alert alert-danger mt-3">
+            <p><strong>Причина відмови:</strong></p>
+            <p>{{ order_info.rejection.rejection_reason }}</p>
+            <p><small><em>Дата відхилення: {{ order_info.rejection.rejection_date|date:"d M Y H:i" }}</em></small></p>
+        </div>
+        {% endif %}
 
         {% if order_info.total_cost > 0 %}
         <p><strong>Загальна вартість:</strong> <span id="total-cost">{{ order_info.total_cost }}</span> грн</p>
@@ -28,8 +40,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Файл: {{ file.file_name }}</h5>
-                        <p><strong>Матеріал:</strong> {{ file.characteristics.get_material_type_display }}</p>
-                        <p><strong>Колір матеріалу:</strong> {{ file.characteristics.get_material_color_display }}</p>
+                        <p><strong>Матеріал:</strong> {{ file.characteristics.material.parameter_name }}</p>
+                        <p><strong>Колір матеріалу:</strong> {{ file.characteristics.material.color }}</p>
                         <p><strong>Розмір:</strong> {{ file.characteristics.size }} мм</p>
                         <p><strong>Якість друку:</strong> {{ file.characteristics.get_resolution_display }}</p>
                         <p><strong>Структури підтримки:</strong> {{ file.characteristics.get_support_structure_display }}</p>

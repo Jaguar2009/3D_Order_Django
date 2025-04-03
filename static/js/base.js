@@ -18,7 +18,7 @@ let finalTranscript = "";
 micBtn.addEventListener("mouseenter", () => {
     hoverTimer = setTimeout(() => {
         micBtn.classList.add("gradient"); // Додаємо градієнтний ефект
-    }, 10000); // Чекаємо 3 секунди
+    }, 3000); // Чекаємо 3 секунди
 });
 
 // Обробка виходу курсора з кнопки
@@ -28,7 +28,8 @@ micBtn.addEventListener("mouseleave", () => {
 });
 
 // Відкриття модального вікна і старт розпізнавання
-micBtn.addEventListener("click", function() {
+micBtn.addEventListener("click", function(e) {
+    e.preventDefault();  // Запобігаємо відправці форми, щоб не відправити пошук
     micModal.style.display = "block";
     transcription.textContent = "Слухаю...";
     finalTranscript = "";
@@ -61,8 +62,8 @@ recognition.onend = function() {
 // Функція для виконання пошуку
 function performSearch(query) {
     console.log("Виконується пошук: ", query);
-    // Реалізуйте логіку пошуку, наприклад, перенаправлення на сторінку пошуку
-    window.location.href = `/search?query=${encodeURIComponent(query)}`;
+    const searchForm = document.getElementById('searchForm');
+    searchForm.submit();  // Відправляємо форму для пошуку
 }
 
 // Закриття модального вікна при натисканні на хрестик
@@ -85,4 +86,3 @@ $(document).ready(function () {
         $("#sidebar").toggleClass("active");
     });
 });
-

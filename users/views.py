@@ -5,14 +5,16 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
+from admin_panel.views import check_user_role
 from posts.models import Post
 from .forms import CustomUserLoginForm, ProfileEditForm, RegistrationForm, PasswordResetRequestForm, \
-    PasswordResetCodeForm, PasswordResetForm
-from .models import Notification, User
+    PasswordResetCodeForm, PasswordResetForm, BanUserForm
+from .models import Notification, User, UserBan
 from django.core.mail import send_mail
 import random
 import string
 from django.conf import settings
+from django.utils import timezone
 
 
 def generate_confirmation_code():
@@ -139,7 +141,7 @@ def user_login(request):
 
     return render(request, 'users_html/login.html', {'form': form})
 
-@login_required
+@login_required(login_url='/users/login/')
 def edit_profile(request):
     user = request.user
     if request.method == 'POST':
@@ -153,7 +155,7 @@ def edit_profile(request):
     return render(request, 'users_html/edit_profile.html', {'form': form})
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/users/login/')
 def user_profile(request):
     user = request.user
     posts = Post.objects.filter(author=user)  # Отримуємо пости, які створив користувач
@@ -164,19 +166,18 @@ def user_profile(request):
     return render(request, 'users_html/user_profile.html', context)
 
 
-
-@login_required(login_url='/login/')
 def user_profile_by_icon(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    posts = Post.objects.filter(author=user)
+    profile_user = get_object_or_404(User, id=user_id)
+    posts = Post.objects.filter(author=profile_user)
+
     context = {
-        'user': user,
+        'profile_user': profile_user,  # Уникнення конфлікту з request.user
         'posts': posts,
     }
     return render(request, 'users_html/user_profile_by_icon.html', context)
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/users/login/')
 def delete_profile(request):
     if request.method == 'POST':
         request.user.delete()
@@ -184,7 +185,7 @@ def delete_profile(request):
     return redirect('user_profile')
 
 
-@login_required(login_url='/login/')
+@login_required(login_url='/users/login/')
 def user_logout(request):
     logout(request)
     return redirect('login')
@@ -260,10 +261,82 @@ def reset_password(request):
     return render(request, "users_html/password_reset_form.html", {"form": form})
 
 
+@login_required(login_url='/users/login/')
 def user_notifications(request):
     notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'users_html/user_notifications.html', {'notifications': notifications})
 
 
+def ban_user(request, user_id):
+    user = get_object_or_404(get_user_model(), id=user_id)
 
+    redirect_response = check_user_role(request)
+    if redirect_response:
+        return redirect_response  # Якщо це користувач, перенаправляємо на home
+
+    if request.method == 'POST':
+        form = BanUserForm(request.POST)
+        if form.is_valid():
+            banned_until = form.cleaned_data['banned_until']
+            reason = form.cleaned_data['reason']
+
+            # Створення бану
+            UserBan.objects.create(
+                user=user,
+                banned_until=banned_until,
+                reason=reason
+            )
+
+            # Оновлюємо статус користувача
+            user.is_active = False
+            user.save()
+
+            # Відправлення email
+            send_mail(
+                subject="Ви заблоковані на сайті",
+                message=f"Вітаємо, ваш обліковий запис заблокований на сайті. Причина: {reason}. Ваш доступ буде відновлений {banned_until}.",
+                from_email="bestinnovations2000@gmail.com",
+                recipient_list=[user.email]
+            )
+
+            return redirect('home')  # Перенаправлення на список користувачів чи іншу сторінку
+
+    else:
+        form = BanUserForm()
+
+    return render(request, 'users_html/ban_user.html', {
+        'form': form,
+        'user': user
+    })
+
+
+def unban_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    redirect_response = check_user_role(request)
+    if redirect_response:
+        return redirect_response  # Якщо це користувач, перенаправляємо на home
+
+    # Якщо користувач вже активний
+    if user.is_active:
+        return redirect('home')
+
+    # Отримуємо бан користувача
+    ban = UserBan.objects.get(user=user)
+
+    # Якщо бан ще триває і натискається кнопка для дострокового розблокування
+    if request.method == 'POST' and 'unban_now' in request.POST:
+        ban.delete()  # Видаляємо бан негайно
+        user.is_active = True  # Відновлюємо активність користувача
+        user.save()
+
+        # Відправляємо лист користувачу
+        send_mail(
+            subject="Ваш бан завершено",
+            message=f"Ваш бан на сайті завершено достроково. Ви знову можете користуватися нашим сервісом.",
+            from_email="bestinnovations2000@gmail.com",
+            recipient_list=[user.email]
+        )
+
+    return redirect('home')
 

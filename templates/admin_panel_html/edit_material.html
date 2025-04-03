@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Редагувати матеріал{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Редагувати матеріал</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Оновити</button>
+    </form>
+    <a href="{% url 'admin_materials' %}" class="btn btn-secondary mt-3">Назад до списку</a>
+</div>
+{% endblock %}

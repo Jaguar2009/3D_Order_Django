@@ -556,3 +556,35 @@
     font-size: 30px;
     cursor: pointer;
 }
+
+
+/* Стилі для кнопки "Убежище" */
+.sanctuary-toggle-btn {
+    background-color: #4CAF50; /* Зелений фон */
+    color: white; /* Білий текст */
+    padding: 10px 20px; /* Відступи */
+    font-size: 16px; /* Розмір шрифту */
+    border: none; /* Без обводки */
+    border-radius: 25px; /* Закруглені кути */
+    cursor: pointer; /* Курсор при наведенні */
+    transition: background-color 0.3s ease; /* Плавний перехід фону */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тінь для кнопки */
+}
+
+.sanctuary-toggle-btn:hover {
+    background-color: #45a049; /* Темніший зелений при наведенні */
+}
+
+.sanctuary-toggle-btn:active {
+    background-color: #388e3c; /* Ще темніший при натисканні */
+}
+
+.sanctuary-toggle-btn:focus {
+    outline: none; /* Прибрати контур при фокусі */
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.6); /* М'яка зелена тінь при фокусі */
+}
+
+.sanctuary-toggle-btn:disabled {
+    background-color: #9e9e9e; /* Сірий фон для вимкненої кнопки */
+    cursor: not-allowed; /* Курсор при вимкненій кнопці */
+}

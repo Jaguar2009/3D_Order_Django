@@ -16,7 +16,7 @@
 
         <!-- Поле для розміру -->
         <div class="form-field {% if form.size.errors %}error{% endif %}">
-            <label for="id_size" class="form-label">Розмір:</label>
+            <label for="id_size" class="form-label">Розмір (%):</label>
             {{ form.size }}
             {% for error in form.size.errors %}
                 <span class="error-message">{{ error }}</span>
@@ -41,9 +41,18 @@
             {% endfor %}
         </div>
 
+        <!-- Поле для матеріалу -->
+        <div class="form-field {% if form.material.errors %}error{% endif %}">
+            <label for="id_material" class="form-label">Матеріал:</label>
+            {{ form.material }}
+            {% for error in form.material.errors %}
+                <span class="error-message">{{ error }}</span>
+            {% endfor %}
+        </div>
+
         <!-- Інші поля форми -->
         {% for field in form %}
-            {% if field.name not in "size copies filling" %}
+            {% if field.name not in "size copies filling material" %}
                 <div class="form-field">
                     <label for="id_{{ field.name }}" class="form-label">{{ field.label }}</label>
                     {{ field }}
@@ -64,3 +73,4 @@
     </div>
 </div>
 {% endblock %}
+

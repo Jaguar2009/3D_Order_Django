@@ -20,4 +20,6 @@ urlpatterns = [
 
     path('order/<int:order_id>/upload-files/', views.upload_order_files, name='upload_order_files'),
     path('order-characteristics-add/<int:order_id>/<int:file_index>/', views.order_characteristics_add, name='order_characteristics_add'),
+
+    path('repeat_order/<int:order_id>/', views.repeat_order, name='repeat_order'),
 ]
